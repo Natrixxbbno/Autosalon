@@ -1,0 +1,28 @@
+## Игнорировать результаты сборки
+bin/
+obj/
+
+## Игнорировать файлы Visual Studio
+.vs/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+## Игнорировать файлы Rider
+.idea/
+*.sln.iml
+
+## Игнорировать временные файлы
+*.swp
+*.*~
+project.lock.json
+.DS_Store
+*.pyc
+nupkg/
+
+## Игнорировать файлы пакетов
+*.nupkg
+*.snupkg
+**/packages/*
+!**/packages/build/ 
