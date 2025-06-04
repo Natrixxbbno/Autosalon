@@ -1,7 +1,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-using AutoSalon.Database;
+using AutoSalon.Database.Repositories;
 
 namespace AutoSalon.Pages
 {
@@ -219,7 +219,8 @@ namespace AutoSalon.Pages
 
                 try
                 {
-                    if (DatabaseConnection.RegisterUser(txtNume.Text, txtPrenume.Text, txtEmail.Text, txtParola.Text))
+                    var userRepository = new UserRepository();
+                    if (userRepository.RegisterUser(txtNume.Text, txtPrenume.Text, txtEmail.Text, txtParola.Text))
                     {
                         MessageBox.Show("Cont creat cu succes!", "Succes", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         this.Close();

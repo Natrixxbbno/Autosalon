@@ -2,13 +2,21 @@ using AutoSalon.Pages;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Linq;
+using Npgsql;
+using AutoSalon.Database;
+using AutoSalon.Database.Repositories;
+using AutoSalon.Pages;
 
 namespace AutoSalon.Pages
 {
     public class LoginPage : Form
     {
+        private readonly UserRepository _userRepository;
+
         public LoginPage()
         {
+            _userRepository = new UserRepository();
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Text = "Autosalon Premium - Autentificare";
             this.Size = new Size(800, 550);
@@ -144,9 +152,18 @@ namespace AutoSalon.Pages
                     MessageBox.Show("Vă rugăm să completați toate câmpurile!", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-
-                // Aici puteți adăuga logica de autentificare
-                MessageBox.Show("Autentificare reușită!", "Succes", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                 MessageBox.Show(txtUsername.Text, txtPassword.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                if (_userRepository.ValidateUser(txtUsername.Text, txtPassword.Text))
+                {
+                    CarListPage carListPage = new CarListPage();
+                    this.Hide();
+                    carListPage.ShowDialog();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Неверное имя пользователя или пароль!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             };
 
             // Adăugarea evenimentului de click pentru butonul de înregistrare

@@ -45,6 +45,7 @@ namespace AutoSalon.Database
 
         private static void ExecuteMigrations(NpgsqlConnection conn)
         {
+
             string migrationsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Database", "migrations");
             var migrationFiles = Directory.GetFiles(migrationsPath, "*.sql")
                                         .OrderBy(f => f);
