@@ -1,6 +1,7 @@
 using System;
 using Npgsql;
 using AutoSalon.Database;
+using BCrypt.Net;
 
 namespace AutoSalon.Database.Repositories
 {
@@ -13,15 +14,19 @@ namespace AutoSalon.Database.Repositories
                 using (var conn = DatabaseConnection.GetConnection())
                 {
                     conn.Open();
-                    string sql = "SELECT * FROM users WHERE email = @email AND password = @password";
+                    string sql = "SELECT password FROM users WHERE email = @email";
                     using (var cmd = new NpgsqlCommand(sql, conn))
                     {
                         cmd.Parameters.AddWithValue("@email", email);
-                        cmd.Parameters.AddWithValue("@password", password);
                         
                         using (var reader = cmd.ExecuteReader())
                         {
-                            return reader.HasRows;
+                            if (reader.Read())
+                            {
+                                string hashedPassword = reader.GetString(0);
+                                return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
+                            }
+                            return false;
                         }
                     }
                 }
@@ -36,6 +41,8 @@ namespace AutoSalon.Database.Repositories
         {
             try
             {
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
+                
                 using (var conn = DatabaseConnection.GetConnection())
                 {
                     conn.Open();
@@ -45,7 +52,7 @@ namespace AutoSalon.Database.Repositories
                         cmd.Parameters.AddWithValue("@firstName", firstName);
                         cmd.Parameters.AddWithValue("@lastName", lastName);
                         cmd.Parameters.AddWithValue("@email", email);
-                        cmd.Parameters.AddWithValue("@password", password);
+                        cmd.Parameters.AddWithValue("@password", hashedPassword);
                         cmd.ExecuteNonQuery();
                     }
                 }
