@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using AutoSalon.Database.Repositories;
+using System.Text.RegularExpressions;
 
 namespace AutoSalon.Pages
 {
@@ -211,6 +212,30 @@ namespace AutoSalon.Pages
                     return;
                 }
 
+                if (!ValidateName(txtNume.Text))
+                {
+                    MessageBox.Show("Numele trebuie să conțină doar litere și să aibă cel puțin 2 caractere!", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (!ValidateName(txtPrenume.Text))
+                {
+                    MessageBox.Show("Prenumele trebuie să conțină doar litere și să aibă cel puțin 2 caractere!", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (!ValidateEmail(txtEmail.Text))
+                {
+                    MessageBox.Show("Vă rugăm să introduceți o adresă de email validă!", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (!ValidatePassword(txtParola.Text))
+                {
+                    MessageBox.Show("Parola trebuie să aibă cel puțin 8 caractere, să conțină cel puțin o literă și o cifră!", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 if (txtParola.Text != txtConfirmareParola.Text)
                 {
                     MessageBox.Show("Parolele nu coincid!", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -251,6 +276,26 @@ namespace AutoSalon.Pages
                 btnInregistrare 
             });
             this.Controls.AddRange(new Control[] { headerPanel, formPanel });
+        }
+
+        private bool ValidateEmail(string email)
+        {
+            string pattern = @"^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
+            return Regex.IsMatch(email, pattern);
+        }
+
+        private bool ValidatePassword(string password)
+        {
+            // Минимум 8 символов, хотя бы одна цифра и одна буква
+            string pattern = @"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$";
+            return Regex.IsMatch(password, pattern);
+        }
+
+        private bool ValidateName(string name)
+        {
+            // Только буквы, минимум 2 символа
+            string pattern = @"^[A-Za-zА-Яа-я]{2,}$";
+            return Regex.IsMatch(name, pattern);
         }
     }
 } 
