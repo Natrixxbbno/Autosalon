@@ -152,7 +152,6 @@ namespace AutoSalon.Pages
                     MessageBox.Show("Vă rugăm să completați toate câmpurile!", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                 MessageBox.Show(txtUsername.Text, txtPassword.Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 if (_userRepository.ValidateUser(txtUsername.Text, txtPassword.Text))
                 {
                     CarListPage carListPage = new CarListPage();

@@ -1,9 +1,13 @@
--- Insert manufacturers
-INSERT INTO manufacturers (name, country) VALUES
-('BMW', 'Germany'),
-('Audi', 'Germany');
+-- Insert manufacturers if table is empty
+INSERT INTO manufacturers (name, country)
+SELECT 'BMW', 'Germany'
+WHERE NOT EXISTS (SELECT 1 FROM manufacturers WHERE name = 'BMW');
 
--- Insert BMW cars
+INSERT INTO manufacturers (name, country)
+SELECT 'Audi', 'Germany'
+WHERE NOT EXISTS (SELECT 1 FROM manufacturers WHERE name = 'Audi');
+
+-- Insert BMW cars if not exists
 INSERT INTO cars (manufacturer_id, model, year, color, price, registration_number, purchase_date)
 SELECT 
     m.id,
@@ -14,7 +18,8 @@ SELECT
     'BMW-X5-001',
     CURRENT_DATE - INTERVAL '2 months'
 FROM manufacturers m
-WHERE m.name = 'BMW';
+WHERE m.name = 'BMW'
+AND NOT EXISTS (SELECT 1 FROM cars WHERE registration_number = 'BMW-X5-001');
 
 INSERT INTO cars (manufacturer_id, model, year, color, price, registration_number, purchase_date)
 SELECT 
@@ -26,7 +31,8 @@ SELECT
     'BMW-M3-001',
     CURRENT_DATE - INTERVAL '1 month'
 FROM manufacturers m
-WHERE m.name = 'BMW';
+WHERE m.name = 'BMW'
+AND NOT EXISTS (SELECT 1 FROM cars WHERE registration_number = 'BMW-M3-001');
 
 INSERT INTO cars (manufacturer_id, model, year, color, price, registration_number, purchase_date)
 SELECT 
@@ -38,9 +44,10 @@ SELECT
     'BMW-320-001',
     CURRENT_DATE - INTERVAL '3 months'
 FROM manufacturers m
-WHERE m.name = 'BMW';
+WHERE m.name = 'BMW'
+AND NOT EXISTS (SELECT 1 FROM cars WHERE registration_number = 'BMW-320-001');
 
--- Insert Audi cars
+-- Insert Audi cars if not exists
 INSERT INTO cars (manufacturer_id, model, year, color, price, registration_number, purchase_date)
 SELECT 
     m.id,
@@ -51,7 +58,8 @@ SELECT
     'AUDI-A6-001',
     CURRENT_DATE - INTERVAL '2 months'
 FROM manufacturers m
-WHERE m.name = 'Audi';
+WHERE m.name = 'Audi'
+AND NOT EXISTS (SELECT 1 FROM cars WHERE registration_number = 'AUDI-A6-001');
 
 INSERT INTO cars (manufacturer_id, model, year, color, price, registration_number, purchase_date)
 SELECT 
@@ -63,7 +71,8 @@ SELECT
     'AUDI-Q7-001',
     CURRENT_DATE - INTERVAL '1 month'
 FROM manufacturers m
-WHERE m.name = 'Audi';
+WHERE m.name = 'Audi'
+AND NOT EXISTS (SELECT 1 FROM cars WHERE registration_number = 'AUDI-Q7-001');
 
 INSERT INTO cars (manufacturer_id, model, year, color, price, registration_number, purchase_date)
 SELECT 
@@ -75,16 +84,21 @@ SELECT
     'AUDI-RS6-001',
     CURRENT_DATE - INTERVAL '4 months'
 FROM manufacturers m
-WHERE m.name = 'Audi';
+WHERE m.name = 'Audi'
+AND NOT EXISTS (SELECT 1 FROM cars WHERE registration_number = 'AUDI-RS6-001');
 
--- Insert some sales history
+-- Insert sales history if not exists
 INSERT INTO sales_history (car_id, sale_date, sale_price)
 SELECT 
     c.id,
     CURRENT_DATE - INTERVAL '1 month',
     c.price * 1.1
 FROM cars c
-WHERE c.model = 'X5';
+WHERE c.model = 'X5'
+AND NOT EXISTS (
+    SELECT 1 FROM sales_history sh 
+    WHERE sh.car_id = c.id
+);
 
 INSERT INTO sales_history (car_id, sale_date, sale_price)
 SELECT 
@@ -92,4 +106,8 @@ SELECT
     CURRENT_DATE - INTERVAL '2 months',
     c.price * 1.15
 FROM cars c
-WHERE c.model = 'A6'; 
+WHERE c.model = 'A6'
+AND NOT EXISTS (
+    SELECT 1 FROM sales_history sh 
+    WHERE sh.car_id = c.id
+); 
