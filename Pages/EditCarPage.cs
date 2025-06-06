@@ -134,6 +134,7 @@ namespace AutoSalon.Pages
             if (carRepository.Update(car))
             {
                 MessageBox.Show("Изменения успешно сохранены!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.DialogResult = DialogResult.OK;
                 this.Close();
             }
             else

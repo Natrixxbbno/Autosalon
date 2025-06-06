@@ -102,7 +102,8 @@ namespace AutoSalon.Database.Repositories
                             color = @color,
                             price = @price,
                             registration_number = @registrationNumber,
-                            purchase_date = @purchaseDate
+                            purchase_date = @purchaseDate,
+                            status_id = @statusId
                         WHERE id = @id";
                     using (var cmd = new NpgsqlCommand(sql, conn))
                     {
@@ -114,6 +115,7 @@ namespace AutoSalon.Database.Repositories
                         cmd.Parameters.AddWithValue("@price", car.Price);
                         cmd.Parameters.AddWithValue("@registrationNumber", car.RegistrationNumber);
                         cmd.Parameters.AddWithValue("@purchaseDate", car.PurchaseDate);
+                        cmd.Parameters.AddWithValue("@statusId", (object)car.StatusId ?? DBNull.Value);
                         cmd.ExecuteNonQuery();
                     }
                 }
