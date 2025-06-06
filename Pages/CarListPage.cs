@@ -56,15 +56,25 @@ namespace AutoSalon.Pages
             {
                 Dock = DockStyle.Top,
                 Height = 80,
-                BackColor = Color.FromArgb(0, 120, 215)
+                BackColor = Color.Transparent
             };
 
             lblTitle = new Label
             {
                 Text = "Управление автомобилями",
                 Font = new Font("Segoe UI", 16F, FontStyle.Bold),
-                ForeColor = Color.White,
+                ForeColor = Color.Black,
                 Location = new Point(20, 20),
+                AutoSize = true
+            };
+
+            // Новый подзаголовок
+            var lblSubtitle = new Label
+            {
+                Text = "Управляйте своим автопарком", // или "Manage your car collection"
+                Font = new Font("Segoe UI", 10F, FontStyle.Regular),
+                ForeColor = Color.FromArgb(120, 120, 120),
+                Location = new Point(22, 52), // чуть ниже основного заголовка
                 AutoSize = true
             };
 
@@ -237,6 +247,7 @@ namespace AutoSalon.Pages
 
             // Добавляем элементы управления на форму
             topPanel.Controls.Add(lblTitle);
+            topPanel.Controls.Add(lblSubtitle);
             searchPanel.Controls.AddRange(new Control[] { txtSearch, cmbManufacturerFilter, cmbStatusFilter });
             sidebarPanel.Controls.AddRange(new Control[] { logoIcon, lblLogo, btnDashboard, btnCarInventory, btnRegisterNewCar, btnAnalytics, btnReports, btnBack });
             
