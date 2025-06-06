@@ -14,9 +14,10 @@ namespace AutoSalon.Database.Repositories
             using (var conn = DatabaseConnection.GetConnection())
             {
                 conn.Open();
-                string sql = @"SELECT c.*, m.name as manufacturer_name, m.country 
+                string sql = @"SELECT c.*, m.name as manufacturer_name, m.country, s.name as status_name, s.color as status_color 
                              FROM cars c 
                              JOIN manufacturers m ON c.manufacturer_id = m.id 
+                             LEFT JOIN car_statuses s ON c.status_id = s.id 
                              WHERE c.id = @id";
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
@@ -39,9 +40,10 @@ namespace AutoSalon.Database.Repositories
             using (var conn = DatabaseConnection.GetConnection())
             {
                 conn.Open();
-                string sql = @"SELECT c.*, m.name as manufacturer_name, m.country 
+                string sql = @"SELECT c.*, m.name as manufacturer_name, m.country, s.name as status_name, s.color as status_color 
                              FROM cars c 
-                             JOIN manufacturers m ON c.manufacturer_id = m.id";
+                             JOIN manufacturers m ON c.manufacturer_id = m.id
+                             LEFT JOIN car_statuses s ON c.status_id = s.id";
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
                     using (var reader = cmd.ExecuteReader())
@@ -153,9 +155,10 @@ namespace AutoSalon.Database.Repositories
             using (var conn = DatabaseConnection.GetConnection())
             {
                 conn.Open();
-                string sql = @"SELECT c.*, m.name as manufacturer_name, m.country 
+                string sql = @"SELECT c.*, m.name as manufacturer_name, m.country, s.name as status_name, s.color as status_color 
                              FROM cars c 
                              JOIN manufacturers m ON c.manufacturer_id = m.id 
+                             LEFT JOIN car_statuses s ON c.status_id = s.id 
                              WHERE m.name = @manufacturerName";
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
@@ -178,9 +181,10 @@ namespace AutoSalon.Database.Repositories
             using (var conn = DatabaseConnection.GetConnection())
             {
                 conn.Open();
-                string sql = @"SELECT c.*, m.name as manufacturer_name, m.country 
+                string sql = @"SELECT c.*, m.name as manufacturer_name, m.country, s.name as status_name, s.color as status_color 
                              FROM cars c 
                              JOIN manufacturers m ON c.manufacturer_id = m.id 
+                             LEFT JOIN car_statuses s ON c.status_id = s.id 
                              WHERE LOWER(c.color) = LOWER(@color)";
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
@@ -203,9 +207,10 @@ namespace AutoSalon.Database.Repositories
             using (var conn = DatabaseConnection.GetConnection())
             {
                 conn.Open();
-                string sql = @"SELECT c.*, m.name as manufacturer_name, m.country 
+                string sql = @"SELECT c.*, m.name as manufacturer_name, m.country, s.name as status_name, s.color as status_color 
                              FROM cars c 
                              JOIN manufacturers m ON c.manufacturer_id = m.id 
+                             LEFT JOIN car_statuses s ON c.status_id = s.id 
                              WHERE c.year = @year";
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
@@ -228,9 +233,10 @@ namespace AutoSalon.Database.Repositories
             using (var conn = DatabaseConnection.GetConnection())
             {
                 conn.Open();
-                string sql = @"SELECT c.*, m.name as manufacturer_name, m.country 
+                string sql = @"SELECT c.*, m.name as manufacturer_name, m.country, s.name as status_name, s.color as status_color 
                              FROM cars c 
                              JOIN manufacturers m ON c.manufacturer_id = m.id 
+                             LEFT JOIN car_statuses s ON c.status_id = s.id 
                              WHERE c.price BETWEEN @minPrice AND @maxPrice";
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
@@ -253,9 +259,10 @@ namespace AutoSalon.Database.Repositories
             using (var conn = DatabaseConnection.GetConnection())
             {
                 conn.Open();
-                string sql = @"SELECT c.*, m.name as manufacturer_name, m.country 
+                string sql = @"SELECT c.*, m.name as manufacturer_name, m.country, s.name as status_name, s.color as status_color 
                              FROM cars c 
                              JOIN manufacturers m ON c.manufacturer_id = m.id 
+                             LEFT JOIN car_statuses s ON c.status_id = s.id 
                              WHERE c.registration_number = @registrationNumber";
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
@@ -274,23 +281,35 @@ namespace AutoSalon.Database.Repositories
 
         private Car MapCar(NpgsqlDataReader reader)
         {
-            return new Car
+            var car = new Car
             {
-                Id = reader.GetInt32(reader.GetOrdinal("id")),
-                ManufacturerId = reader.GetInt32(reader.GetOrdinal("manufacturer_id")),
-                Model = reader.GetString(reader.GetOrdinal("model")),
-                Year = reader.GetInt32(reader.GetOrdinal("year")),
-                Color = reader.GetString(reader.GetOrdinal("color")),
-                Price = reader.GetDecimal(reader.GetOrdinal("price")),
-                RegistrationNumber = reader.GetString(reader.GetOrdinal("registration_number")),
-                PurchaseDate = reader.GetDateTime(reader.GetOrdinal("purchase_date")),
-                CreatedAt = reader.GetDateTime(reader.GetOrdinal("created_at")),
+                Id = Convert.ToInt32(reader["id"]),
+                ManufacturerId = Convert.ToInt32(reader["manufacturer_id"]),
+                Model = reader["model"].ToString(),
+                Year = Convert.ToInt32(reader["year"]),
+                Color = reader["color"].ToString(),
+                Price = Convert.ToDecimal(reader["price"]),
+                RegistrationNumber = reader["registration_number"].ToString(),
+                Mileage = reader["mileage"] != DBNull.Value ? Convert.ToInt32(reader["mileage"]) : 0,
+                StatusId = reader["status_id"] != DBNull.Value ? Convert.ToInt32(reader["status_id"]) : 0,
+                PurchaseDate = Convert.ToDateTime(reader["purchase_date"]),
+                CreatedAt = Convert.ToDateTime(reader["created_at"]),
                 Manufacturer = new Manufacturer
                 {
-                    Name = reader.GetString(reader.GetOrdinal("manufacturer_name")),
-                    Country = reader.GetString(reader.GetOrdinal("country"))
+                    Id = Convert.ToInt32(reader["manufacturer_id"]),
+                    Name = reader["manufacturer_name"].ToString(),
+                    Country = reader["country"].ToString(),
+                    CreatedAt = Convert.ToDateTime(reader["created_at"])
+                },
+                Status = new CarStatus
+                {
+                    Id = reader["status_id"] != DBNull.Value ? Convert.ToInt32(reader["status_id"]) : 0,
+                    Name = reader["status_name"]?.ToString() ?? string.Empty,
+                    Color = reader["status_color"]?.ToString() ?? "#cccccc",
+                    CreatedAt = DateTime.Now // или reader["status_created_at"] если есть
                 }
             };
+            return car;
         }
     }
 } 

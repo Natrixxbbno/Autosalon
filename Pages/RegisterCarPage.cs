@@ -27,11 +27,16 @@ namespace AutoSalon.Pages
         private Label lblPrice;
         private Label lblRegistrationNumber;
         private Label lblPurchaseDate;
+        private NumericUpDown numMileage;
+        private ComboBox cmbStatus;
+        private Label lblMileage;
+        private Label lblStatus;
 
         public RegisterCarPage()
         {
             InitializeComponents();
             LoadManufacturers();
+            LoadStatuses();
         }
 
         private void InitializeComponents()
@@ -146,10 +151,41 @@ namespace AutoSalon.Pages
                 Format = DateTimePickerFormat.Short
             };
 
+            lblMileage = new Label
+            {
+                Text = "Пробег:",
+                Location = new Point(20, 440),
+                Size = new Size(200, 20)
+            };
+
+            numMileage = new NumericUpDown
+            {
+                Location = new Point(20, 465),
+                Size = new Size(440, 25),
+                Minimum = 0,
+                Maximum = 1000000,
+                Value = 0,
+                ThousandsSeparator = true
+            };
+
+            lblStatus = new Label
+            {
+                Text = "Статус:",
+                Location = new Point(20, 440),
+                Size = new Size(200, 20)
+            };
+
+            cmbStatus = new ComboBox
+            {
+                Location = new Point(20, 465),
+                Size = new Size(440, 25),
+                DropDownStyle = ComboBoxStyle.DropDownList
+            };
+
             btnSave = new Button
             {
                 Text = "Сохранить",
-                Location = new Point(20, 460),
+                Location = new Point(20, 510),
                 Size = new Size(200, 40),
                 BackColor = Color.FromArgb(0, 120, 215),
                 ForeColor = Color.White,
@@ -160,7 +196,7 @@ namespace AutoSalon.Pages
             btnCancel = new Button
             {
                 Text = "Отмена",
-                Location = new Point(260, 460),
+                Location = new Point(260, 510),
                 Size = new Size(200, 40),
                 BackColor = Color.FromArgb(200, 200, 200),
                 ForeColor = Color.Black,
@@ -181,6 +217,8 @@ namespace AutoSalon.Pages
                 lblPrice, numPrice,
                 lblRegistrationNumber, txtRegistrationNumber,
                 lblPurchaseDate, dtpPurchaseDate,
+                lblMileage, numMileage,
+                lblStatus, cmbStatus,
                 btnSave, btnCancel
             });
         }
@@ -198,42 +236,48 @@ namespace AutoSalon.Pages
             cmbManufacturer.ValueMember = "Id";
         }
 
+        private void LoadStatuses()
+        {
+            var statusRepository = new CarStatusRepository();
+            var statuses = statusRepository.GetAll();
+            cmbStatus.Items.Clear();
+            foreach (var status in statuses)
+            {
+                cmbStatus.Items.Add(status);
+            }
+            cmbStatus.DisplayMember = "Name";
+            cmbStatus.ValueMember = "Id";
+            if (cmbStatus.Items.Count > 0)
+                cmbStatus.SelectedIndex = 0;
+        }
+
         private void BtnSave_Click(object sender, EventArgs e)
         {
-            if (ValidateInput())
+            if (!ValidateInput()) return;
+            var car = new Car
             {
-                var car = new Car
-                {
-                    ManufacturerId = ((Manufacturer)cmbManufacturer.SelectedItem).Id,
-                    Model = txtModel.Text.Trim(),
-                    Year = (int)numYear.Value,
-                    Color = txtColor.Text.Trim(),
-                    Price = numPrice.Value,
-                    RegistrationNumber = txtRegistrationNumber.Text.Trim(),
-                    PurchaseDate = dtpPurchaseDate.Value
-                };
-
-                var carRepository = new CarRepository();
-                try
-                {
-                    if (carRepository.Add(car))
-                    {
-                        MessageBox.Show("Автомобиль успешно зарегистрирован!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        this.DialogResult = DialogResult.OK;
-                        this.Close();
-                    }
-                    // Else case is now handled by the catch block as the repository throws
-                }
-                catch (Npgsql.PostgresException pgEx)
-                {
-                    // Обработка специфических ошибок PostgreSQL
-                    MessageBox.Show($"Ошибка базы данных при регистрации автомобиля: {pgEx.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                catch (Exception ex)
-                {
-                    // Общая обработка других ошибок
-                    MessageBox.Show($"Ошибка при регистрации автомобиля: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                Manufacturer = cmbManufacturer.SelectedItem as Manufacturer,
+                ManufacturerId = (cmbManufacturer.SelectedItem as Manufacturer)?.Id ?? 0,
+                Model = txtModel.Text.Trim(),
+                Year = (int)numYear.Value,
+                Color = txtColor.Text.Trim(),
+                Price = numPrice.Value,
+                RegistrationNumber = txtRegistrationNumber.Text.Trim(),
+                Mileage = (int)numMileage.Value,
+                Status = cmbStatus.SelectedItem as CarStatus,
+                StatusId = (cmbStatus.SelectedItem as CarStatus)?.Id ?? 1,
+                PurchaseDate = dtpPurchaseDate.Value,
+                CreatedAt = DateTime.Now
+            };
+            var carRepository = new CarRepository();
+            if (carRepository.Add(car))
+            {
+                MessageBox.Show("Автомобиль успешно зарегистрирован!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Ошибка при регистрации автомобиля.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
