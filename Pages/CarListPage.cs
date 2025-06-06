@@ -18,6 +18,8 @@ namespace AutoSalon.Pages
         private TextBox txtDeleteRegistrationNumber;
         private Button btnDeleteCar;
         private Label lblDeleteRegistrationNumber;
+        private string currentSortColumn = "manufacturer_name";
+        private bool isAscending = true;
 
         public CarListPage()
         {
@@ -45,11 +47,33 @@ namespace AutoSalon.Pages
                 AllowUserToDeleteRows = false,
                 ReadOnly = true,
                 SelectionMode = DataGridViewSelectionMode.FullRowSelect,
-                MultiSelect = false
+                MultiSelect = false,
+                Font = new Font("Segoe UI", 9F),
+                RowTemplate = { Height = 35 },
+                ColumnHeadersHeight = 40,
+                ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle
+                {
+                    BackColor = Color.FromArgb(0, 120, 215),
+                    ForeColor = Color.White,
+                    Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+                    Alignment = DataGridViewContentAlignment.MiddleCenter
+                },
+                DefaultCellStyle = new DataGridViewCellStyle
+                {
+                    Alignment = DataGridViewContentAlignment.MiddleCenter,
+                    Padding = new Padding(5)
+                },
+                AlternatingRowsDefaultCellStyle = new DataGridViewCellStyle
+                {
+                    BackColor = Color.FromArgb(245, 245, 245)
+                }
             };
 
             // Подписываемся на событие клика по содержимому ячейки (для кнопок)
             dgvCars.CellContentClick += dgvCars_CellContentClick;
+
+            // Подписываемся на событие клика по заголовку колонки
+            dgvCars.ColumnHeaderMouseClick += DgvCars_ColumnHeaderMouseClick;
 
             // Настраиваем колонки
             // Добавляем скрытый столбец для ID
@@ -57,11 +81,23 @@ namespace AutoSalon.Pages
             dgvCars.Columns["Id"].Visible = false; // Скрываем столбец ID
 
             dgvCars.Columns.Add("Manufacturer", "Производитель");
+            dgvCars.Columns["Manufacturer"].Width = 150;
+
             dgvCars.Columns.Add("Model", "Модель");
+            dgvCars.Columns["Model"].Width = 150;
+
             dgvCars.Columns.Add("Year", "Год");
+            dgvCars.Columns["Year"].Width = 80;
+
             dgvCars.Columns.Add("Color", "Цвет");
+            dgvCars.Columns["Color"].Width = 100;
+
             dgvCars.Columns.Add("Price", "Цена");
+            dgvCars.Columns["Price"].Width = 120;
+            dgvCars.Columns["Price"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
             dgvCars.Columns.Add("RegistrationNumber", "Регистрационный номер");
+            dgvCars.Columns["RegistrationNumber"].Width = 150;
 
             // Добавляем столбец с кнопкой удаления
             var deleteButtonColumn = new DataGridViewButtonColumn
@@ -100,8 +136,28 @@ namespace AutoSalon.Pages
             btnRegisterNew.Click += BtnRegisterNew_Click;
             btnBack.Click += (s, e) => this.Close();
 
+            // Добавляем кнопку для просмотра средней цены
+            Button btnAveragePrice = new Button
+            {
+                Text = "Средняя цена по стране",
+                Location = new Point(290, 540),
+                Size = new Size(200, 30),
+                BackColor = Color.FromArgb(0, 120, 215),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
+            };
+
+            btnAveragePrice.Click += (s, e) =>
+            {
+                using (var averagePriceForm = new AveragePricePage())
+                {
+                    averagePriceForm.ShowDialog();
+                }
+            };
+
             // Добавляем все элементы управления на форму
-            this.Controls.AddRange(new Control[] { dgvCars, btnRegisterNew, btnBack });
+            this.Controls.AddRange(new Control[] { dgvCars, btnRegisterNew, btnAveragePrice, btnBack });
         }
 
         private void BtnRegisterNew_Click(object sender, EventArgs e)
@@ -113,6 +169,42 @@ namespace AutoSalon.Pages
                     LoadCars(); // Обновляем список после добавления нового автомобиля
                 }
             }
+        }
+
+        private void DgvCars_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.ColumnIndex < 0) return;
+
+            string columnName = dgvCars.Columns[e.ColumnIndex].Name;
+            
+            // Пропускаем колонки, которые не нужно сортировать
+            if (columnName == "Id" || columnName == "DeleteColumn") return;
+
+            // Определяем имя колонки в базе данных
+            string dbColumnName = columnName switch
+            {
+                "Manufacturer" => "manufacturer_name",
+                "Model" => "model",
+                "Year" => "year",
+                "Color" => "color",
+                "Price" => "price",
+                "RegistrationNumber" => "registration_number",
+                _ => columnName
+            };
+
+            // Если кликнули по той же колонке, меняем направление сортировки
+            if (currentSortColumn == dbColumnName)
+            {
+                isAscending = !isAscending;
+            }
+            else
+            {
+                currentSortColumn = dbColumnName;
+                isAscending = true;
+            }
+
+            // Обновляем отображение
+            LoadCars();
         }
 
         private void BtnDeleteCar_Click(object sender, EventArgs e)
@@ -160,7 +252,7 @@ namespace AutoSalon.Pages
                     SELECT c.id, c.*, m.name as manufacturer_name 
                     FROM cars c 
                     JOIN manufacturers m ON c.manufacturer_id = m.id 
-                    ORDER BY m.name";
+                    ORDER BY " + currentSortColumn + (isAscending ? " ASC" : " DESC");
 
                 using (var cmd = new NpgsqlCommand(sql, conn))
                 {
@@ -173,14 +265,13 @@ namespace AutoSalon.Pages
                         foreach (DataRow row in dt.Rows)
                         {
                             dgvCars.Rows.Add(
-                                row["id"], // Добавляем ID
+                                row["id"],
                                 row["manufacturer_name"],
                                 row["model"],
                                 row["year"],
                                 row["color"],
                                 Convert.ToDecimal(row["price"]).ToString("C"),
                                 row["registration_number"]
-                                // Столбец с кнопкой удаления будет добавлен автоматически
                             );
                         }
                     }
