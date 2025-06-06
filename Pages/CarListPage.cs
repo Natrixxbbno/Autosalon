@@ -125,7 +125,7 @@ namespace AutoSalon.Pages
             btnBack = new Button
             {
                 Text = "Назад",
-                Location = new Point(870, 540),
+                Location = new Point(950, 540),
                 Size = new Size(100, 30),
                 BackColor = Color.FromArgb(0, 120, 215),
                 ForeColor = Color.White,
@@ -156,8 +156,48 @@ namespace AutoSalon.Pages
                 }
             };
 
+            // Добавляем кнопку для просмотра цен по цвету
+            Button btnPriceByColor = new Button
+            {
+                Text = "Цены по цвету",
+                Location = new Point(510, 540),
+                Size = new Size(200, 30),
+                BackColor = Color.FromArgb(0, 120, 215),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
+            };
+
+            btnPriceByColor.Click += (s, e) =>
+            {
+                using (var priceByColorForm = new CarPriceByColorPage())
+                {
+                    priceByColorForm.ShowDialog();
+                }
+            };
+
+            // Добавляем кнопку для просмотра производителя с наибольшим количеством автомобилей
+            Button btnMostFrequent = new Button
+            {
+                Text = "Популярный производитель",
+                Location = new Point(730, 540),
+                Size = new Size(200, 30),
+                BackColor = Color.FromArgb(0, 120, 215),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                Cursor = Cursors.Hand
+            };
+
+            btnMostFrequent.Click += (s, e) =>
+            {
+                using (var mostFrequentForm = new MostFrequentManufacturerPage())
+                {
+                    mostFrequentForm.ShowDialog();
+                }
+            };
+
             // Добавляем все элементы управления на форму
-            this.Controls.AddRange(new Control[] { dgvCars, btnRegisterNew, btnAveragePrice, btnBack });
+            this.Controls.AddRange(new Control[] { dgvCars, btnRegisterNew, btnAveragePrice, btnPriceByColor, btnMostFrequent, btnBack });
         }
 
         private void BtnRegisterNew_Click(object sender, EventArgs e)
