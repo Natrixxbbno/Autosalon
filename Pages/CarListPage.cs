@@ -32,7 +32,7 @@ namespace AutoSalon.Pages
         private Button btnRegisterNewCar;
         private Button btnAnalytics;
         private Button btnReports;
-        private PictureBox logoPictureBox;
+        private Label logoIcon;
         private Label lblLogo;
 
         public CarListPage()
@@ -182,19 +182,21 @@ namespace AutoSalon.Pages
                 Width = 220,
                 BackColor = Color.FromArgb(245, 245, 245)
             };
-            logoPictureBox = new PictureBox
+            logoIcon = new Label
             {
-                SizeMode = PictureBoxSizeMode.Zoom,
-                Location = new Point(20, 20),
-                Size = new Size(40, 40),
-                BackColor = Color.LightGray
+                Text = "\uE804",
+                Font = new Font("Segoe MDL2 Assets", 32F, FontStyle.Regular),
+                ForeColor = Color.Black,
+                Location = new Point(10, 18),
+                AutoSize = true,
+                BackColor = Color.Transparent
             };
             lblLogo = new Label
             {
                 Text = "CarAutosalon",
                 Font = new Font("Segoe UI", 16F, FontStyle.Bold),
                 ForeColor = Color.Black,
-                Location = new Point(70, 28),
+                Location = new Point(68, 32),
                 AutoSize = true
             };
             btnDashboard = new Button { Text = "\uD83D\uDCCA  Dashboard", Location = new Point(0, 80), Size = new Size(220, 50), FlatStyle = FlatStyle.Flat, BackColor = Color.Transparent, ForeColor = Color.Black, Font = new Font("Segoe UI", 12F, FontStyle.Regular), TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(24, 0, 0, 0), Cursor = Cursors.Hand };
@@ -236,7 +238,7 @@ namespace AutoSalon.Pages
             // Добавляем элементы управления на форму
             topPanel.Controls.Add(lblTitle);
             searchPanel.Controls.AddRange(new Control[] { txtSearch, cmbManufacturerFilter, cmbStatusFilter });
-            sidebarPanel.Controls.AddRange(new Control[] { logoPictureBox, lblLogo, btnDashboard, btnCarInventory, btnRegisterNewCar, btnAnalytics, btnReports, btnBack });
+            sidebarPanel.Controls.AddRange(new Control[] { logoIcon, lblLogo, btnDashboard, btnCarInventory, btnRegisterNewCar, btnAnalytics, btnReports, btnBack });
             
             this.Controls.AddRange(new Control[] { topPanel, searchPanel, dgvCars, sidebarPanel });
 

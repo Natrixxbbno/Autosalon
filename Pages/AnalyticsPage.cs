@@ -317,11 +317,26 @@ namespace AutoSalon.Pages
                 Location = location,
                 Size = size,
                 BackColor = Color.White,
-                BorderStyle = BorderStyle.FixedSingle,
-                Margin = new Padding(10)
+                BorderStyle = BorderStyle.None,
+                Margin = new Padding(10),
+                Padding = new Padding(28, 24, 28, 24)
             };
-             // Добавляем тень (простой вариант через BorderStyle)
-             card.BorderStyle = BorderStyle.FixedSingle;
+            card.Paint += (s, e) => {
+                var g = e.Graphics;
+                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+                int radius = 32; // Более округлённые углы
+                using (var path = new System.Drawing.Drawing2D.GraphicsPath())
+                {
+                    path.AddArc(0, 0, radius, radius, 180, 90);
+                    path.AddArc(card.Width - radius - 1, 0, radius, radius, 270, 90);
+                    path.AddArc(card.Width - radius - 1, card.Height - radius - 1, radius, radius, 0, 90);
+                    path.AddArc(0, card.Height - radius - 1, radius, radius, 90, 90);
+                    path.CloseAllFigures();
+                    card.Region = new Region(path);
+                    using (var pen = new Pen(Color.LightGray, 1))
+                        g.DrawPath(pen, path);
+                }
+            };
             return card;
         }
 
