@@ -358,10 +358,23 @@ namespace AutoSalon.Pages
                 case "white": return Color.White;
                 case "silver": return Color.Silver;
                 case "gray": return Color.Gray;
-                case "blue": return Color.FromArgb(60, 120, 216); // Используем синий по скриншоту
+                case "blue": return Color.FromArgb(60, 120, 216);
                 case "red": return Color.Red;
-                // Добавьте другие цвета по необходимости
-                default: return Color.Black; // Цвет по умолчанию
+                case "green": return Color.Green;
+                case "yellow": return Color.Yellow;
+                case "orange": return Color.Orange;
+                case "brown": return Color.Brown;
+                case "beige": return Color.Beige;
+                case "purple": return Color.Purple;
+                case "pink": return Color.Pink;
+                // Добавьте другие стандартные цвета по необходимости
+                default:
+                    // Генерируем цвет на основе хеша названия (для новых цветов)
+                    int hash = colorName.GetHashCode();
+                    int r = (hash & 0xFF0000) >> 16;
+                    int g = (hash & 0x00FF00) >> 8;
+                    int b = (hash & 0x0000FF);
+                    return Color.FromArgb(255, r, g, b);
             }
         }
     }

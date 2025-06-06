@@ -197,11 +197,11 @@ namespace AutoSalon.Pages
                 Location = new Point(70, 28),
                 AutoSize = true
             };
-            btnDashboard = new Button { Text = "Dashboard", Location = new Point(0, 80), Size = new Size(220, 50), FlatStyle = FlatStyle.Flat, BackColor = Color.Transparent, Font = new Font("Segoe UI", 12F), TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(40, 0, 0, 0) };
-            btnCarInventory = new Button { Text = "Автомобили", Location = new Point(0, 130), Size = new Size(220, 50), FlatStyle = FlatStyle.Flat, BackColor = Color.Transparent, Font = new Font("Segoe UI", 12F), TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(40, 0, 0, 0) };
-            btnRegisterNewCar = new Button { Text = "Добавить автомобиль", Location = new Point(0, 180), Size = new Size(220, 50), FlatStyle = FlatStyle.Flat, BackColor = Color.Transparent, Font = new Font("Segoe UI", 12F), TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(40, 0, 0, 0) };
-            btnAnalytics = new Button { Text = "Analytics", Location = new Point(0, 230), Size = new Size(220, 50), FlatStyle = FlatStyle.Flat, BackColor = Color.Transparent, Font = new Font("Segoe UI", 12F), TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(40, 0, 0, 0) };
-            btnReports = new Button { Text = "Reports", Location = new Point(0, 280), Size = new Size(220, 50), FlatStyle = FlatStyle.Flat, BackColor = Color.Transparent, Font = new Font("Segoe UI", 12F), TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(40, 0, 0, 0) };
+            btnDashboard = new Button { Text = "\uD83D\uDCCA  Dashboard", Location = new Point(0, 80), Size = new Size(220, 50), FlatStyle = FlatStyle.Flat, BackColor = Color.Transparent, ForeColor = Color.Black, Font = new Font("Segoe UI", 12F, FontStyle.Regular), TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(24, 0, 0, 0), Cursor = Cursors.Hand };
+            btnCarInventory = new Button { Text = "\uD83D\uDE97  Car Inventory", Location = new Point(0, 130), Size = new Size(220, 50), FlatStyle = FlatStyle.Flat, BackColor = Color.Black, ForeColor = Color.White, Font = new Font("Segoe UI", 12F, FontStyle.Regular), TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(24, 0, 0, 0), Cursor = Cursors.Hand };
+            btnRegisterNewCar = new Button { Text = "\u2795  Register New Car", Location = new Point(0, 180), Size = new Size(220, 50), FlatStyle = FlatStyle.Flat, BackColor = Color.Transparent, ForeColor = Color.Black, Font = new Font("Segoe UI", 12F, FontStyle.Regular), TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(24, 0, 0, 0), Cursor = Cursors.Hand };
+            btnAnalytics = new Button { Text = "\u23F0  Analytics", Location = new Point(0, 230), Size = new Size(220, 50), FlatStyle = FlatStyle.Flat, BackColor = Color.Transparent, ForeColor = Color.Black, Font = new Font("Segoe UI", 12F, FontStyle.Regular), TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(24, 0, 0, 0), Cursor = Cursors.Hand };
+            btnReports = new Button { Text = "\uD83D\uDCC4  Reports", Location = new Point(0, 280), Size = new Size(220, 50), FlatStyle = FlatStyle.Flat, BackColor = Color.Transparent, ForeColor = Color.Black, Font = new Font("Segoe UI", 12F, FontStyle.Regular), TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(24, 0, 0, 0), Cursor = Cursors.Hand };
             btnBack = new Button 
             { 
                 Text = "Выход", 
@@ -216,17 +216,18 @@ namespace AutoSalon.Pages
             };
 
             // Добавляем обработчики для кнопок бокового меню
-            btnDashboard.Click += (s, e) => MessageBox.Show("Раздел Dashboard в разработке", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            btnCarInventory.Click += (s, e) => { /* ничего не делаем, уже на этой странице */ };
+            btnDashboard.Click += (s, e) => { SetActiveSidebarButton(btnDashboard); MessageBox.Show("Раздел Dashboard в разработке", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information); };
+            btnCarInventory.Click += (s, e) => { SetActiveSidebarButton(btnCarInventory); /* ничего не делаем, уже на этой странице */ };
             btnRegisterNewCar.Click += (s, e) => {
+                SetActiveSidebarButton(btnRegisterNewCar);
                 using (var registerForm = new RegisterCarPage())
                 {
                     registerForm.ShowDialog();
                     LoadCars();
                 }
             };
-            btnAnalytics.Click += (s, e) => { using (var form = new AnalyticsPage()) form.ShowDialog(); };
-            btnReports.Click += (s, e) => MessageBox.Show("Раздел Reports в разработке", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            btnAnalytics.Click += (s, e) => { SetActiveSidebarButton(btnAnalytics); using (var form = new AnalyticsPage()) form.ShowDialog(); };
+            btnReports.Click += (s, e) => { SetActiveSidebarButton(btnReports); MessageBox.Show("Раздел Reports в разработке", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information); };
             btnBack.Click += (s, e) => this.Close();
 
             // После создания dgvCars:
@@ -436,6 +437,20 @@ namespace AutoSalon.Pages
                     );
                 }
             }
+        }
+
+        private void SetActiveSidebarButton(Button activeButton)
+        {
+            var buttons = new[] { btnDashboard, btnCarInventory, btnRegisterNewCar, btnAnalytics, btnReports };
+            foreach (var btn in buttons)
+            {
+                btn.BackColor = Color.Transparent;
+                btn.ForeColor = Color.Black;
+                btn.Font = new Font("Segoe UI", 12F, FontStyle.Regular);
+            }
+            activeButton.BackColor = Color.Black;
+            activeButton.ForeColor = Color.White;
+            activeButton.Font = new Font("Segoe UI", 12F, FontStyle.Regular);
         }
     }
 } 
