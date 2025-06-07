@@ -11,291 +11,239 @@ namespace AutoSalon.Pages
         public RegisterPage()
         {
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.Text = "Autosalon Premium - Înregistrare";
-            this.Size = new Size(850, 800);
-            this.BackColor = Color.FromArgb(235, 235, 235);
+            this.Text = "AutoSalon Premium - Register";
+            this.Size = new Size(420, 680);
+            this.BackColor = Color.FromArgb(245, 247, 251);
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
 
-            // Panel pentru logo și titlu
+            // Верхняя панель с иконкой и заголовком
             Panel headerPanel = new Panel
             {
                 Location = new Point(0, 0),
-                Size = new Size(800, 120),
-                BackColor = Color.White,
-                BorderStyle = BorderStyle.FixedSingle
-            };
-
-            // Adăugare logouri BMW și Audi
-            PictureBox picBMW = new PictureBox
-            {
-                Image = Image.FromFile("bmw.png"),
-                SizeMode = PictureBoxSizeMode.Zoom,
-                Location = new Point(20, 20),
-                Size = new Size(80, 80),
+                Size = new Size(420, 180),
                 BackColor = Color.Transparent
             };
-            PictureBox picAudi = new PictureBox
+
+            PictureBox picCar = new PictureBox
             {
-                Image = Image.FromFile("audi.png"),
+                Image = Image.FromFile("Resources/car.png"),
                 SizeMode = PictureBoxSizeMode.Zoom,
-                Location = new Point(700, 20),
-                Size = new Size(80, 80),
+                Location = new Point((420 - 64) / 2, 24),
+                Size = new Size(64, 64),
                 BackColor = Color.Transparent
             };
 
             Label lblTitle = new Label
             {
-                Text = "CREARE CONT NOU",
-                Location = new Point(150, 20),
-                Size = new Size(500, 30),
-                Font = new Font("Segoe UI", 20, FontStyle.Bold),
-                ForeColor = Color.FromArgb(64, 64, 64),
-                TextAlign = ContentAlignment.MiddleCenter
+                Text = "AutoSalon Premium",
+                Location = new Point(0, 100),
+                Size = new Size(420, 32),
+                Font = new Font("Segoe UI", 18, FontStyle.Bold),
+                ForeColor = Color.White,
+                TextAlign = ContentAlignment.MiddleCenter,
+                BackColor = Color.Transparent
             };
 
             Label lblSubtitle = new Label
             {
-                Text = "BMW & AUDI",
-                Location = new Point(150, 50),
-                Size = new Size(500, 20),
-                Font = new Font("Segoe UI", 14),
-                ForeColor = Color.FromArgb(100, 100, 100),
-                TextAlign = ContentAlignment.MiddleCenter
+                Text = "Create your account and discover your dream car",
+                Location = new Point(0, 135),
+                Size = new Size(420, 20),
+                Font = new Font("Segoe UI", 10, FontStyle.Regular),
+                ForeColor = Color.White,
+                TextAlign = ContentAlignment.MiddleCenter,
+                BackColor = Color.Transparent
             };
 
-            // Buton ÎNAPOI (doar în header, lângă logo BMW)
-            Button btnInapoi = new Button
+            // Градиентный фон для header
+            headerPanel.Paint += (s, e) =>
             {
-                Text = "ÎNAPOI",
-                Size = new Size(90, 35),
-                Location = new Point(110, 40), // lângă logo BMW
-                Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                BackColor = Color.White,
-                ForeColor = Color.FromArgb(0, 120, 215),
-                FlatStyle = FlatStyle.Flat,
-                Cursor = Cursors.Hand
+                using (var brush = new System.Drawing.Drawing2D.LinearGradientBrush(headerPanel.ClientRectangle,
+                    Color.FromArgb(63, 94, 251), Color.FromArgb(70, 204, 252), 90F))
+                {
+                    e.Graphics.FillRectangle(brush, headerPanel.ClientRectangle);
+                }
             };
-            btnInapoi.FlatAppearance.BorderColor = Color.FromArgb(0, 120, 215);
-            btnInapoi.FlatAppearance.BorderSize = 1;
-            btnInapoi.Click += (sender, e) => this.Close();
-            headerPanel.Controls.Add(btnInapoi);
+            headerPanel.Controls.AddRange(new Control[] { picCar, lblTitle, lblSubtitle });
 
-            // Panel pentru formular
+            // Панель формы
             Panel formPanel = new Panel
             {
-                Location = new Point(150, 170),
-                Size = new Size(550, 600),
-                BackColor = Color.White,
-                BorderStyle = BorderStyle.FixedSingle
+                Location = new Point(0, 180),
+                Size = new Size(420, 420),
+                BackColor = Color.White
             };
 
-            // Câmpuri pentru înregistrare
-            Label lblNume = new Label
+            // Функция для создания поля с иконкой (кастомные PNG)
+            Func<string, string, int, TextBox> createTextBoxWithIcon = (placeholder, iconType, y) =>
             {
-                Text = "Nume",
-                Location = new Point(50, 30),
-                Size = new Size(300, 20),
-                Font = new Font("Segoe UI", 10),
-                ForeColor = Color.FromArgb(64, 64, 64)
+                Panel panel = new Panel
+                {
+                    Location = new Point(40, y),
+                    Size = new Size(340, 44),
+                    BackColor = Color.White
+                };
+                PictureBox icon = new PictureBox
+                {
+                    Size = new Size(24, 24),
+                    Location = new Point(8, 10),
+                    SizeMode = PictureBoxSizeMode.Zoom,
+                    BackColor = Color.Transparent
+                };
+                if (iconType == "user")
+                    icon.Image = Image.FromFile("Resources/login.png");
+                else if (iconType == "email")
+                    icon.Image = Image.FromFile("Resources/email.png");
+                else if (iconType == "password")
+                    icon.Image = Image.FromFile("Resources/password.png");
+                TextBox tb = new TextBox
+                {
+                    Location = new Point(40, 10),
+                    Size = new Size(280, 24),
+                    Font = new Font("Segoe UI", 10),
+                    BorderStyle = BorderStyle.None,
+                    ForeColor = Color.FromArgb(40, 40, 40),
+                    BackColor = Color.White,
+                    Tag = placeholder
+                };
+                tb.GotFocus += (s, e) => { if (tb.Text == placeholder) { tb.Text = ""; tb.ForeColor = Color.Black; } };
+                tb.LostFocus += (s, e) => { if (string.IsNullOrWhiteSpace(tb.Text)) { tb.Text = placeholder; tb.ForeColor = Color.Gray; } };
+                tb.Text = placeholder;
+                tb.ForeColor = Color.Gray;
+                panel.Controls.Add(icon);
+                panel.Controls.Add(tb);
+                formPanel.Controls.Add(panel);
+                return tb;
             };
 
-            TextBox txtNume = new TextBox
-            {
-                Location = new Point(50, 60),
-                Size = new Size(400, 30),
-                Font = new Font("Segoe UI", 10),
-                BackColor = Color.FromArgb(245, 245, 245),
-                ForeColor = Color.FromArgb(64, 64, 64),
-                BorderStyle = BorderStyle.FixedSingle
-            };
+            var txtFirstName = createTextBoxWithIcon("First Name", "user", 20);
+            var txtLastName = createTextBoxWithIcon("Last Name", "user", 74);
+            var txtEmail = createTextBoxWithIcon("Email Address", "email", 128);
+            var txtPassword = createTextBoxWithIcon("Enter your password", "password", 182);
+            txtPassword.UseSystemPasswordChar = true;
+            var txtConfirmPassword = createTextBoxWithIcon("Confirm your password", "password", 236);
+            txtConfirmPassword.UseSystemPasswordChar = true;
 
-            Label lblPrenume = new Label
+            // Кнопка регистрации
+            Button btnRegister = new Button
             {
-                Text = "Prenume",
-                Location = new Point(50, 120),
-                Size = new Size(300, 20),
-                Font = new Font("Segoe UI", 10),
-                ForeColor = Color.FromArgb(64, 64, 64)
-            };
-
-            TextBox txtPrenume = new TextBox
-            {
-                Location = new Point(50, 150),
-                Size = new Size(400, 30),
-                Font = new Font("Segoe UI", 10),
-                BackColor = Color.FromArgb(245, 245, 245),
-                ForeColor = Color.FromArgb(64, 64, 64),
-                BorderStyle = BorderStyle.FixedSingle
-            };
-
-            Label lblEmail = new Label
-            {
-                Text = "Email",
-                Location = new Point(50, 210),
-                Size = new Size(300, 20),
-                Font = new Font("Segoe UI", 10),
-                ForeColor = Color.FromArgb(64, 64, 64)
-            };
-
-            TextBox txtEmail = new TextBox
-            {
-                Location = new Point(50, 240),
-                Size = new Size(400, 30),
-                Font = new Font("Segoe UI", 10),
-                BackColor = Color.FromArgb(245, 245, 245),
-                ForeColor = Color.FromArgb(64, 64, 64),
-                BorderStyle = BorderStyle.FixedSingle
-            };
-
-            Label lblParola = new Label
-            {
-                Text = "Parolă",
-                Location = new Point(50, 300),
-                Size = new Size(300, 20),
-                Font = new Font("Segoe UI", 10),
-                ForeColor = Color.FromArgb(64, 64, 64)
-            };
-
-            TextBox txtParola = new TextBox
-            {
-                Location = new Point(50, 330),
-                Size = new Size(400, 30),
-                Font = new Font("Segoe UI", 10),
-                PasswordChar = '•',
-                BackColor = Color.FromArgb(245, 245, 245),
-                ForeColor = Color.FromArgb(64, 64, 64),
-                BorderStyle = BorderStyle.FixedSingle
-            };
-
-            Label lblConfirmareParola = new Label
-            {
-                Text = "Confirmare parolă",
-                Location = new Point(50, 390),
-                Size = new Size(300, 20),
-                Font = new Font("Segoe UI", 10),
-                ForeColor = Color.FromArgb(64, 64, 64)
-            };
-
-            TextBox txtConfirmareParola = new TextBox
-            {
-                Location = new Point(50, 420),
-                Size = new Size(400, 30),
-                Font = new Font("Segoe UI", 10),
-                PasswordChar = '•',
-                BackColor = Color.FromArgb(245, 245, 245),
-                ForeColor = Color.FromArgb(64, 64, 64),
-                BorderStyle = BorderStyle.FixedSingle
-            };
-
-            Button btnInregistrare = new Button
-            {
-                Text = "CREARE CONT",
-                Size = new Size(320, 50),
-                Location = new Point((550 - 320) / 2, 500),
+                Text = "Create Account",
+                Size = new Size(340, 44),
+                Location = new Point(40, 300),
                 Font = new Font("Segoe UI", 12, FontStyle.Bold),
-                BackColor = Color.FromArgb(0, 120, 215),
+                BackColor = Color.FromArgb(63, 94, 251),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat,
                 Cursor = Cursors.Hand
             };
+            btnRegister.FlatAppearance.BorderSize = 0;
+            btnRegister.MouseEnter += (s, e) => btnRegister.BackColor = Color.FromArgb(50, 80, 200);
+            btnRegister.MouseLeave += (s, e) => btnRegister.BackColor = Color.FromArgb(63, 94, 251);
+            formPanel.Controls.Add(btnRegister);
 
-            // Adăugarea evenimentului de click pentru butonul de înregistrare
-            btnInregistrare.Click += (sender, e) =>
+            // Ссылка на вход
+            LinkLabel linkSignIn = new LinkLabel
             {
-                if (string.IsNullOrEmpty(txtNume.Text) || string.IsNullOrEmpty(txtPrenume.Text) ||
-                    string.IsNullOrEmpty(txtEmail.Text) || string.IsNullOrEmpty(txtParola.Text) ||
-                    string.IsNullOrEmpty(txtConfirmareParola.Text))
+                Text = "Already have an account? Sign in here",
+                Location = new Point(90, 355),
+                Size = new Size(250, 20),
+                Font = new Font("Segoe UI", 9),
+                LinkColor = Color.FromArgb(63, 94, 251),
+                ActiveLinkColor = Color.FromArgb(50, 80, 200),
+                TextAlign = ContentAlignment.MiddleCenter
+            };
+            formPanel.Controls.Add(linkSignIn);
+
+            // Нижняя подпись
+            Label lblFooter = new Label
+            {
+                Text = "🚗 Discover Premium Vehicles • Reliable Service • Competitive Financing",
+                Location = new Point(0, 620),
+                Size = new Size(420, 20),
+                Font = new Font("Segoe UI", 8),
+                ForeColor = Color.Gray,
+                TextAlign = ContentAlignment.MiddleCenter
+            };
+            this.Controls.Add(lblFooter);
+
+            // Логика регистрации
+            btnRegister.Click += (sender, e) =>
+            {
+                if (txtFirstName.Text == "First Name" || txtLastName.Text == "Last Name" ||
+                    txtEmail.Text == "Email Address" || txtPassword.Text == "Enter your password" ||
+                    txtConfirmPassword.Text == "Confirm your password" ||
+                    string.IsNullOrWhiteSpace(txtFirstName.Text) || string.IsNullOrWhiteSpace(txtLastName.Text) ||
+                    string.IsNullOrWhiteSpace(txtEmail.Text) || string.IsNullOrWhiteSpace(txtPassword.Text) ||
+                    string.IsNullOrWhiteSpace(txtConfirmPassword.Text))
                 {
-                    MessageBox.Show("Vă rugăm să completați toate câmpurile!", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Пожалуйста, заполните все поля!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-
-                if (!ValidateName(txtNume.Text))
+                if (!ValidateName(txtFirstName.Text))
                 {
-                    MessageBox.Show("Numele trebuie să conțină doar litere și să aibă cel puțin 2 caractere!", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Имя должно содержать только буквы и быть не менее 2 символов!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-
-                if (!ValidateName(txtPrenume.Text))
+                if (!ValidateName(txtLastName.Text))
                 {
-                    MessageBox.Show("Prenumele trebuie să conțină doar litere și să aibă cel puțin 2 caractere!", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Фамилия должна содержать только буквы и быть не менее 2 символов!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-
                 if (!ValidateEmail(txtEmail.Text))
                 {
-                    MessageBox.Show("Vă rugăm să introduceți o adresă de email validă!", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Пожалуйста, введите корректный email адрес!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-
-                if (!ValidatePassword(txtParola.Text))
+                if (!ValidatePassword(txtPassword.Text))
                 {
-                    MessageBox.Show("Parola trebuie să aibă cel puțin 8 caractere, să conțină cel puțin o literă și o cifră!", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Пароль должен быть не менее 8 символов, содержать хотя бы одну букву и одну цифру!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-
-                if (txtParola.Text != txtConfirmareParola.Text)
+                if (txtPassword.Text != txtConfirmPassword.Text)
                 {
-                    MessageBox.Show("Parolele nu coincid!", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Пароли не совпадают!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
                 try
                 {
                     var userRepository = new UserRepository();
-                    if (userRepository.RegisterUser(txtNume.Text, txtPrenume.Text, txtEmail.Text, txtParola.Text))
+                    if (userRepository.RegisterUser(txtFirstName.Text, txtLastName.Text, txtEmail.Text, txtPassword.Text))
                     {
-                        MessageBox.Show("Cont creat cu succes!", "Succes", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Аккаунт успешно создан!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         this.Close();
-                    }
-                    else
-                    {
-                        MessageBox.Show("Eroare la crearea contului!", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Eroare la salvare: {ex.Message}", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Ошибка при сохранении: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             };
 
-            // Adăugarea efectului de hover pentru buton
-            btnInregistrare.MouseEnter += (sender, e) => btnInregistrare.BackColor = Color.FromArgb(0, 100, 195);
-            btnInregistrare.MouseLeave += (sender, e) => btnInregistrare.BackColor = Color.FromArgb(0, 120, 215);
-
-            // Adăugarea controalelor în panouri
-            headerPanel.Controls.AddRange(new Control[] { picBMW, lblTitle, lblSubtitle, picAudi });
-            formPanel.Controls.AddRange(new Control[] { 
-                lblNume, txtNume,
-                lblPrenume, txtPrenume,
-                lblEmail, txtEmail,
-                lblParola, txtParola,
-                lblConfirmareParola, txtConfirmareParola,
-                btnInregistrare 
-            });
-            this.Controls.AddRange(new Control[] { headerPanel, formPanel });
+            // Добавление панелей на форму
+            this.Controls.Add(headerPanel);
+            this.Controls.Add(formPanel);
         }
 
         private bool ValidateEmail(string email)
         {
-            string pattern = @"^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
+            string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
             return Regex.IsMatch(email, pattern);
         }
 
         private bool ValidatePassword(string password)
         {
-            // Минимум 8 символов, хотя бы одна цифра и одна буква
-            string pattern = @"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$";
+            string pattern = @"^(?=.*[A-Za-z])(?=.*\d).{8,}$";
             return Regex.IsMatch(password, pattern);
         }
 
         private bool ValidateName(string name)
         {
-            // Только буквы, минимум 2 символа
-            string pattern = @"^[A-Za-zА-Яа-я]{2,}$";
+            name = name.Trim();
+            string pattern = @"^[A-Za-zА-Яа-яЁё\-']{2,}$";
             return Regex.IsMatch(name, pattern);
         }
     }
-} 
+}

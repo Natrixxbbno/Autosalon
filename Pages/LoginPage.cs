@@ -34,24 +34,6 @@ namespace AutoSalon.Pages
                 BorderStyle = BorderStyle.FixedSingle
             };
 
-            // Adăugare logouri BMW și Audi
-            PictureBox picBMW = new PictureBox
-            {
-                Image = Image.FromFile("bmw.png"),
-                SizeMode = PictureBoxSizeMode.Zoom,
-                Location = new Point(20, 20),
-                Size = new Size(80, 80),
-                BackColor = Color.Transparent
-            };
-            PictureBox picAudi = new PictureBox
-            {
-                Image = Image.FromFile("audi.png"),
-                SizeMode = PictureBoxSizeMode.Zoom,
-                Location = new Point(700, 20),
-                Size = new Size(80, 80),
-                BackColor = Color.Transparent
-            };
-
             Label lblTitle = new Label
             {
                 Text = "AUTOSALON PREMIUM",
@@ -179,7 +161,7 @@ namespace AutoSalon.Pages
             btnRegister.MouseLeave += (sender, e) => btnRegister.BackColor = Color.White;
 
             // Adăugarea controalelor în panouri
-            headerPanel.Controls.AddRange(new Control[] { picBMW, lblTitle, lblSubtitle, picAudi });
+            headerPanel.Controls.AddRange(new Control[] { lblTitle, lblSubtitle });
             formPanel.Controls.AddRange(new Control[] { 
                 lblUsername, txtUsername,
                 lblPassword, txtPassword,
