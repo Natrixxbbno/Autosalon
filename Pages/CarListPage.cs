@@ -86,28 +86,114 @@ namespace AutoSalon.Pages
                 BackColor = Color.White
             };
 
-            txtSearch = new TextBox
+            // Label для поиска
+            var lblSearch = new Label
             {
-                Location = new Point(10, 10),
-                Size = new Size(300, 30),
-                PlaceholderText = "Поиск по модели или производителю...",
-                Font = new Font("Segoe UI", 10F)
+                Text = "Search",
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                ForeColor = Color.Black,
+                Location = new Point(10, 0),
+                AutoSize = true
+            };
+            // Label для производителя
+            var lblMake = new Label
+            {
+                Text = "Make",
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                ForeColor = Color.Black,
+                Location = new Point(200, 0),
+                AutoSize = true
+            };
+            // Label для статуса
+            var lblStatus = new Label
+            {
+                Text = "Status",
+                Font = new Font("Segoe UI", 10F, FontStyle.Bold),
+                ForeColor = Color.Black,
+                Location = new Point(420, 0),
+                AutoSize = true
             };
 
+            // --- Минималистичные панели для поиска и фильтров ---
+            int panelHeight = 28;
+            int panelWidth = 180;
+
+            // Панель для поиска
+            var searchBoxPanel = new Panel
+            {
+                Location = new Point(10, 22),
+                Size = new Size(panelWidth, panelHeight),
+                BackColor = Color.White,
+                BorderStyle = BorderStyle.FixedSingle
+            };
+            txtSearch = new TextBox
+            {
+                BorderStyle = BorderStyle.None,
+                Location = new Point(2, 4), // левее, чтобы текст помещался
+                Size = new Size(340, 20),
+                PlaceholderText = "Search by make or model...",
+                Font = new Font("Segoe UI", 11F, FontStyle.Regular),
+                ForeColor = Color.Gray
+            };
+            searchBoxPanel.Controls.Add(txtSearch);
+
+            // Панель для фильтра производителя
+            var makePanel = new Panel
+            {
+                Location = new Point(200, 18),
+                Size = new Size(panelWidth, panelHeight + 18),
+                BackColor = Color.White,
+                BorderStyle = BorderStyle.FixedSingle
+            };
+            var lblMakeInside = new Label
+            {
+                Text = "Make",
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+                ForeColor = Color.Black,
+                Location = new Point(8, 0),
+                AutoSize = true
+            };
             cmbManufacturerFilter = new ComboBox
             {
-                Location = new Point(320, 10),
-                Size = new Size(200, 30),
+                Location = new Point(200, 14),
+                Size = new Size(200, 32),
                 DropDownStyle = ComboBoxStyle.DropDownList,
-                Font = new Font("Segoe UI", 10F)
+                Font = new Font("Segoe UI", 12F, FontStyle.Regular),
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.White,
+                ForeColor = Color.Black
+            };
+            makePanel.Controls.Add(lblMakeInside);
+            makePanel.Controls.Add(cmbManufacturerFilter);
+
+            // Панель для фильтра статуса
+            var statusPanel = new Panel
+            {
+                Location = new Point(420, 14),
+                Size = new Size(panelWidth, panelHeight + 18),
+                BackColor = Color.White,
+                BorderStyle = BorderStyle.FixedSingle
+            };
+            var lblStatusInside = new Label
+            {
+                Text = "Status",
+                Font = new Font("Segoe UI", 9F, FontStyle.Bold),
+                ForeColor = Color.Black,
+                Location = new Point(8, 0),
+                AutoSize = true
             };
             cmbStatusFilter = new ComboBox
             {
-                Location = new Point(540, 10),
-                Size = new Size(200, 30),
+                Location = new Point(420, 14),
+                Size = new Size(200, 32),
                 DropDownStyle = ComboBoxStyle.DropDownList,
-                Font = new Font("Segoe UI", 10F)
+                Font = new Font("Segoe UI", 12F, FontStyle.Regular),
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.White,
+                ForeColor = Color.Black
             };
+            statusPanel.Controls.Add(lblStatusInside);
+            statusPanel.Controls.Add(cmbStatusFilter);
 
             // DataGridView
             dgvCars = new DataGridView
@@ -216,7 +302,7 @@ namespace AutoSalon.Pages
             btnReports = new Button { Text = "\uD83D\uDCC4  Reports", Location = new Point(0, 280), Size = new Size(220, 50), FlatStyle = FlatStyle.Flat, BackColor = Color.Transparent, ForeColor = Color.Black, Font = new Font("Segoe UI", 12F, FontStyle.Regular), TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(24, 0, 0, 0), Cursor = Cursors.Hand };
             btnBack = new Button 
             { 
-                Text = "Выход", 
+                Text = "⏏️  Выход",
                 Dock = DockStyle.Bottom,
                 Size = new Size(220, 50), 
                 FlatStyle = FlatStyle.Flat, 
@@ -248,7 +334,12 @@ namespace AutoSalon.Pages
             // Добавляем элементы управления на форму
             topPanel.Controls.Add(lblTitle);
             topPanel.Controls.Add(lblSubtitle);
-            searchPanel.Controls.AddRange(new Control[] { txtSearch, cmbManufacturerFilter, cmbStatusFilter });
+            searchPanel.Controls.Add(lblSearch);
+            searchPanel.Controls.Add(searchBoxPanel);
+            searchPanel.Controls.Add(lblMake);
+            searchPanel.Controls.Add(cmbManufacturerFilter);
+            searchPanel.Controls.Add(lblStatus);
+            searchPanel.Controls.Add(cmbStatusFilter);
             sidebarPanel.Controls.AddRange(new Control[] { logoIcon, lblLogo, btnDashboard, btnCarInventory, btnRegisterNewCar, btnAnalytics, btnReports, btnBack });
             
             this.Controls.AddRange(new Control[] { topPanel, searchPanel, dgvCars, sidebarPanel });
