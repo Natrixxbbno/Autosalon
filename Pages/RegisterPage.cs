@@ -8,8 +8,11 @@ namespace AutoSalon.Pages
 {
     public class RegisterPage : Form
     {
-        public RegisterPage()
+        private Form _loginForm;
+
+        public RegisterPage(Form loginForm = null)
         {
+            _loginForm = loginForm;
             this.StartPosition = FormStartPosition.CenterScreen;
             this.Text = "AutoSalon Premium - Register";
             this.Size = new Size(420, 680);
@@ -105,13 +108,22 @@ namespace AutoSalon.Pages
                     Font = new Font("Segoe UI", 10),
                     BorderStyle = BorderStyle.None,
                     ForeColor = Color.FromArgb(40, 40, 40),
-                    BackColor = Color.White,
-                    Tag = placeholder
+                    BackColor = Color.White
                 };
-                tb.GotFocus += (s, e) => { if (tb.Text == placeholder) { tb.Text = ""; tb.ForeColor = Color.Black; } };
-                tb.LostFocus += (s, e) => { if (string.IsNullOrWhiteSpace(tb.Text)) { tb.Text = placeholder; tb.ForeColor = Color.Gray; } };
-                tb.Text = placeholder;
-                tb.ForeColor = Color.Gray;
+                // Только для паролей используем PlaceholderText и скрытый ввод
+                if (iconType == "password")
+                {
+                    tb.PlaceholderText = placeholder;
+                    tb.UseSystemPasswordChar = true;
+                }
+                else
+                {
+                    tb.Tag = placeholder;
+                    tb.GotFocus += (s, e) => { if (tb.Text == placeholder) { tb.Text = ""; tb.ForeColor = Color.Black; } };
+                    tb.LostFocus += (s, e) => { if (string.IsNullOrWhiteSpace(tb.Text)) { tb.Text = placeholder; tb.ForeColor = Color.Gray; } };
+                    tb.Text = placeholder;
+                    tb.ForeColor = Color.Gray;
+                }
                 panel.Controls.Add(icon);
                 panel.Controls.Add(tb);
                 formPanel.Controls.Add(panel);
@@ -123,8 +135,10 @@ namespace AutoSalon.Pages
             var txtEmail = createTextBoxWithIcon("Email Address", "email", 128);
             var txtPassword = createTextBoxWithIcon("Enter your password", "password", 182);
             txtPassword.UseSystemPasswordChar = true;
+            txtPassword.PlaceholderText = "Enter your password";
             var txtConfirmPassword = createTextBoxWithIcon("Confirm your password", "password", 236);
             txtConfirmPassword.UseSystemPasswordChar = true;
+            txtConfirmPassword.PlaceholderText = "Confirm your password";
 
             // Кнопка регистрации
             Button btnRegister = new Button
@@ -222,9 +236,19 @@ namespace AutoSalon.Pages
                 }
             };
 
+            linkSignIn.LinkClicked += (s, e) =>
+            {
+                this.Hide();
+                var loginForm = new LoginPage();
+                loginForm.ShowDialog();
+                this.Show();
+            };
+
             // Добавление панелей на форму
             this.Controls.Add(headerPanel);
             this.Controls.Add(formPanel);
+
+            this.FormClosed += (s, e) => Application.Exit();
         }
 
         private bool ValidateEmail(string email)
