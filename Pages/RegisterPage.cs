@@ -14,7 +14,7 @@ namespace AutoSalon.Pages
         {
             _loginForm = loginForm;
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.Text = "AutoSalon Premium - Register";
+            this.Text = "AutoSalon Premium - Înregistrare";
             this.Size = new Size(420, 680);
             this.BackColor = Color.FromArgb(245, 247, 251);
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -51,7 +51,7 @@ namespace AutoSalon.Pages
 
             Label lblSubtitle = new Label
             {
-                Text = "Create your account and discover your dream car",
+                Text = "Creați-vă contul și descoperiți mașina visurilor dvs.",
                 Location = new Point(0, 135),
                 Size = new Size(420, 20),
                 Font = new Font("Segoe UI", 10, FontStyle.Regular),
@@ -130,20 +130,20 @@ namespace AutoSalon.Pages
                 return tb;
             };
 
-            var txtFirstName = createTextBoxWithIcon("First Name", "user", 20);
-            var txtLastName = createTextBoxWithIcon("Last Name", "user", 74);
-            var txtEmail = createTextBoxWithIcon("Email Address", "email", 128);
-            var txtPassword = createTextBoxWithIcon("Enter your password", "password", 182);
+            var txtFirstName = createTextBoxWithIcon("Prenume", "user", 20);
+            var txtLastName = createTextBoxWithIcon("Nume", "user", 74);
+            var txtEmail = createTextBoxWithIcon("Adresa de email", "email", 128);
+            var txtPassword = createTextBoxWithIcon("Introduceți parola", "password", 182);
             txtPassword.UseSystemPasswordChar = true;
-            txtPassword.PlaceholderText = "Enter your password";
-            var txtConfirmPassword = createTextBoxWithIcon("Confirm your password", "password", 236);
+            txtPassword.PlaceholderText = "Introduceți parola";
+            var txtConfirmPassword = createTextBoxWithIcon("Confirmați parola", "password", 236);
             txtConfirmPassword.UseSystemPasswordChar = true;
-            txtConfirmPassword.PlaceholderText = "Confirm your password";
+            txtConfirmPassword.PlaceholderText = "Confirmați parola";
 
             // Кнопка регистрации
             Button btnRegister = new Button
             {
-                Text = "Create Account",
+                Text = "Creează cont",
                 Size = new Size(340, 44),
                 Location = new Point(40, 300),
                 Font = new Font("Segoe UI", 12, FontStyle.Bold),
@@ -160,7 +160,7 @@ namespace AutoSalon.Pages
             // Ссылка на вход
             LinkLabel linkSignIn = new LinkLabel
             {
-                Text = "Already have an account? Sign in here",
+                Text = "Aveți deja un cont? Autentificați-vă aici",
                 Location = new Point(90, 355),
                 Size = new Size(250, 20),
                 Font = new Font("Segoe UI", 9),
@@ -173,7 +173,7 @@ namespace AutoSalon.Pages
             // Нижняя подпись
             Label lblFooter = new Label
             {
-                Text = "🚗 Discover Premium Vehicles • Reliable Service • Competitive Financing",
+                Text = "🚗 Descoperiți Vehicule Premium • Servicii De Încredere • Finanțare Competitivă",
                 Location = new Point(0, 620),
                 Size = new Size(420, 20),
                 Font = new Font("Segoe UI", 8),
@@ -185,39 +185,39 @@ namespace AutoSalon.Pages
             // Логика регистрации
             btnRegister.Click += (sender, e) =>
             {
-                if (txtFirstName.Text == "First Name" || txtLastName.Text == "Last Name" ||
-                    txtEmail.Text == "Email Address" || txtPassword.Text == "Enter your password" ||
-                    txtConfirmPassword.Text == "Confirm your password" ||
+                if (txtFirstName.Text == "Prenume" || txtLastName.Text == "Nume" ||
+                    txtEmail.Text == "Adresa de email" || txtPassword.Text == "Introduceți parola" ||
+                    txtConfirmPassword.Text == "Confirmați parola" ||
                     string.IsNullOrWhiteSpace(txtFirstName.Text) || string.IsNullOrWhiteSpace(txtLastName.Text) ||
                     string.IsNullOrWhiteSpace(txtEmail.Text) || string.IsNullOrWhiteSpace(txtPassword.Text) ||
                     string.IsNullOrWhiteSpace(txtConfirmPassword.Text))
                 {
-                    MessageBox.Show("Пожалуйста, заполните все поля!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Vă rugăm să completați toate câmpurile!", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
                 if (!ValidateName(txtFirstName.Text))
                 {
-                    MessageBox.Show("Имя должно содержать только буквы и быть не менее 2 символов!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Prenumele trebuie să conțină doar litere și să aibă cel puțin 2 caractere!", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
                 if (!ValidateName(txtLastName.Text))
                 {
-                    MessageBox.Show("Фамилия должна содержать только буквы и быть не менее 2 символов!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Numele trebuie să conțină doar litere și să aibă cel puțin 2 caractere!", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
                 if (!ValidateEmail(txtEmail.Text))
                 {
-                    MessageBox.Show("Пожалуйста, введите корректный email адрес!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Vă rugăm să introduceți o adresă de email validă!", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
                 if (!ValidatePassword(txtPassword.Text))
                 {
-                    MessageBox.Show("Пароль должен быть не менее 8 символов, содержать хотя бы одну букву и одну цифру!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Parola trebuie să aibă cel puțin 8 caractere, să conțină cel puțin o literă și o cifră!", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
                 if (txtPassword.Text != txtConfirmPassword.Text)
                 {
-                    MessageBox.Show("Пароли не совпадают!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Parolele nu coincid!", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -226,13 +226,13 @@ namespace AutoSalon.Pages
                     var userRepository = new UserRepository();
                     if (userRepository.RegisterUser(txtFirstName.Text, txtLastName.Text, txtEmail.Text, txtPassword.Text))
                     {
-                        MessageBox.Show("Аккаунт успешно создан!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Cont creat cu succes!", "Succes", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         this.Close();
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Ошибка при сохранении: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Eroare la salvare: {ex.Message}", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             };
 

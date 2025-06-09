@@ -47,7 +47,7 @@ namespace AutoSalon.Pages
 
         private void InitializeComponents()
         {
-            this.Text = "Автосалон - Управление автомобилями";
+            this.Text = "AutoSalon - Gestionarea Automobilelor";
             this.Size = new Size(1200, 800);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.BackColor = Color.FromArgb(241, 244, 248); // светло-серый фон, как на скриншоте
@@ -72,7 +72,7 @@ namespace AutoSalon.Pages
 
             lblTitle = new Label
             {
-                Text = "Управление автомобилями",
+                Text = "Gestionarea Automobilelor",
                 Font = new Font("Segoe UI", 18F, FontStyle.Bold),
                 ForeColor = Color.White,
                 Location = new Point(20, 20),
@@ -82,10 +82,10 @@ namespace AutoSalon.Pages
             // Новый подзаголовок
             var lblSubtitle = new Label
             {
-                Text = "Управляйте своим автопарком", // или "Manage your car collection"
+                Text = "Gestionați-vă parcul auto",
                 Font = new Font("Segoe UI", 11F, FontStyle.Regular),
                 ForeColor = Color.White,
-                Location = new Point(22, 54), // чуть ниже основного заголовка
+                Location = new Point(22, 54),
                 AutoSize = true
             };
 
@@ -100,7 +100,7 @@ namespace AutoSalon.Pages
             // Label для поиска
             var lblSearch = new Label
             {
-                Text = "Search",
+                Text = "Căutare",
                 Font = new Font("Segoe UI", 10F, FontStyle.Bold),
                 ForeColor = Color.Black,
                 Location = new Point(10, 0),
@@ -109,7 +109,7 @@ namespace AutoSalon.Pages
             // Label для производителя
             var lblMake = new Label
             {
-                Text = "Make",
+                Text = "Marcă",
                 Font = new Font("Segoe UI", 10F, FontStyle.Bold),
                 ForeColor = Color.Black,
                 Location = new Point(200, 0),
@@ -140,9 +140,9 @@ namespace AutoSalon.Pages
             txtSearch = new TextBox
             {
                 BorderStyle = BorderStyle.None,
-                Location = new Point(2, 4), // левее, чтобы текст помещался
+                Location = new Point(2, 4),
                 Size = new Size(340, 20),
-                PlaceholderText = "Search by make or model...",
+                PlaceholderText = "Căutați după marcă sau model...",
                 Font = new Font("Segoe UI", 11F, FontStyle.Regular),
                 ForeColor = Color.Gray
             };
@@ -158,7 +158,7 @@ namespace AutoSalon.Pages
             };
             var lblMakeInside = new Label
             {
-                Text = "Make",
+                Text = "Marcă",
                 Font = new Font("Segoe UI", 9F, FontStyle.Bold),
                 ForeColor = Color.Black,
                 Location = new Point(8, 0),
@@ -252,14 +252,14 @@ namespace AutoSalon.Pages
             dgvCars.Columns.Add("Id", "ID");
             dgvCars.Columns["Id"].Visible = false;
 
-            dgvCars.Columns.Add("Manufacturer", "Производитель");
-            dgvCars.Columns.Add("Model", "Модель");
-            dgvCars.Columns.Add("Year", "Год");
-            dgvCars.Columns.Add("Color", "Цвет");
-            dgvCars.Columns.Add("Mileage", "Пробег");
-            dgvCars.Columns.Add("Price", "Цена");
-            dgvCars.Columns.Add("RegistrationNumber", "Регистрационный номер");
-            dgvCars.Columns.Add("Status", "Статус");
+            dgvCars.Columns.Add("Manufacturer", "Producător");
+            dgvCars.Columns.Add("Model", "Model");
+            dgvCars.Columns.Add("Year", "An");
+            dgvCars.Columns.Add("Color", "Culoare");
+            dgvCars.Columns.Add("Mileage", "Kilometraj");
+            dgvCars.Columns.Add("Price", "Preț");
+            dgvCars.Columns.Add("RegistrationNumber", "Număr de înmatriculare");
+            dgvCars.Columns.Add("Status", "Status");
 
             // Добавляем обработчик сортировки
             dgvCars.ColumnHeaderMouseClick += DgvCars_ColumnHeaderMouseClick;
@@ -267,7 +267,7 @@ namespace AutoSalon.Pages
             // Вместо этого добавляю одну колонку:
             var actionColumn = new DataGridViewTextBoxColumn
             {
-                HeaderText = "Действие",
+                HeaderText = "Acțiune",
                 Name = "ActionColumn",
                 Width = 80
             };
@@ -302,15 +302,15 @@ namespace AutoSalon.Pages
             btnRegisterNewCar = new Button { Text = "\u2795  Register New Car", Location = new Point(0, 176), Size = new Size(220, 48), FlatStyle = FlatStyle.Flat, BackColor = Color.Transparent, ForeColor = Color.White, Font = new Font("Segoe UI", 12F, FontStyle.Regular), TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(24, 0, 0, 0), Cursor = Cursors.Hand, TabStop = false };
             btnAnalytics = new Button { Text = "\u23F0  Analytics", Location = new Point(0, 224), Size = new Size(220, 48), FlatStyle = FlatStyle.Flat, BackColor = Color.Transparent, ForeColor = Color.White, Font = new Font("Segoe UI", 12F, FontStyle.Regular), TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(24, 0, 0, 0), Cursor = Cursors.Hand, TabStop = false };
             btnReports = new Button { Text = "\uD83D\uDCC4  Reports", Location = new Point(0, 272), Size = new Size(220, 48), FlatStyle = FlatStyle.Flat, BackColor = Color.Transparent, ForeColor = Color.White, Font = new Font("Segoe UI", 12F, FontStyle.Regular), TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(24, 0, 0, 0), Cursor = Cursors.Hand, TabStop = false };
-            btnBack = new Button 
-            { 
-                Text = "⏏️  Выход",
+            btnBack = new Button
+            {
+                Text = "⏏️  Ieșire",
                 Dock = DockStyle.Bottom,
-                Size = new Size(220, 50), 
-                FlatStyle = FlatStyle.Flat, 
-                BackColor = Color.Transparent, 
-                Font = new Font("Segoe UI", 12F), 
-                TextAlign = ContentAlignment.MiddleLeft, 
+                Size = new Size(220, 50),
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.Transparent,
+                Font = new Font("Segoe UI", 12F),
+                TextAlign = ContentAlignment.MiddleLeft,
                 Padding = new Padding(40, 0, 0, 0),
                 Cursor = Cursors.Hand,
                 ForeColor = Color.White
@@ -504,7 +504,7 @@ namespace AutoSalon.Pages
             var repo = new ManufacturerRepository();
             var manufacturers = repo.GetAll().ToList();
             cmbManufacturerFilter.Items.Clear();
-            cmbManufacturerFilter.Items.Add("Все марки");
+            cmbManufacturerFilter.Items.Add("Toate mărcile");
             foreach (var m in manufacturers)
                 cmbManufacturerFilter.Items.Add(m.Name);
             cmbManufacturerFilter.SelectedIndex = 0;
@@ -515,7 +515,7 @@ namespace AutoSalon.Pages
             var repo = new CarStatusRepository();
             var statuses = repo.GetAll().ToList();
             cmbStatusFilter.Items.Clear();
-            cmbStatusFilter.Items.Add("Все статусы");
+            cmbStatusFilter.Items.Add("Toate statusurile");
             foreach (var s in statuses)
                 cmbStatusFilter.Items.Add(s.Name);
             cmbStatusFilter.SelectedIndex = 0;

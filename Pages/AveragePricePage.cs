@@ -49,19 +49,19 @@ namespace AutoSalon.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при загрузке списка стран: {ex.Message}", "Ошибка", 
+                MessageBox.Show($"Eroare la încărcarea listei de țări: {ex.Message}", "Eroare", 
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void InitializeComponent()
         {
-            this.Text = "Средняя цена по стране";
+            this.Text = "Prețul Mediu pe Țară";
             this.Size = new System.Drawing.Size(800, 500);
 
             Label lblCountry = new Label
             {
-                Text = "Выберите страну производителя:",
+                Text = "Selectați țara producătorului:",
                 Location = new System.Drawing.Point(20, 20),
                 AutoSize = true
             };
@@ -75,7 +75,7 @@ namespace AutoSalon.Pages
 
             Button btnCalculate = new Button
             {
-                Text = "Рассчитать",
+                Text = "Calculează",
                 Location = new System.Drawing.Point(240, 50),
                 Width = 100
             };
@@ -101,9 +101,9 @@ namespace AutoSalon.Pages
                 MultiSelect = false
             };
 
-            dgvCars.Columns.Add("Manufacturer", "Производитель");
-            dgvCars.Columns.Add("Model", "Модель");
-            dgvCars.Columns.Add("Price", "Цена");
+            dgvCars.Columns.Add("Manufacturer", "Producător");
+            dgvCars.Columns.Add("Model", "Model");
+            dgvCars.Columns.Add("Price", "Preț");
             dgvCars.Columns["Price"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
             btnCalculate.Click += (sender, e) =>
@@ -112,7 +112,7 @@ namespace AutoSalon.Pages
                 {
                     if (cmbCountry.SelectedItem == null)
                     {
-                        MessageBox.Show("Пожалуйста, выберите страну", "Предупреждение", 
+                        MessageBox.Show("Vă rugăm să selectați o țară", "Avertisment", 
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
@@ -137,11 +137,11 @@ namespace AutoSalon.Pages
                             if (result != null && result != DBNull.Value)
                             {
                                 decimal averagePrice = Convert.ToDecimal(result);
-                                lblResult.Text = $"Средняя цена автомобилей из {country}: {averagePrice:C}";
+                                lblResult.Text = $"Prețul mediu al automobilelor din {country}: {averagePrice:C}";
                             }
                             else
                             {
-                                lblResult.Text = $"Автомобили из страны {country} не найдены";
+                                lblResult.Text = $"Nu s-au găsit automobile din țara {country}";
                             }
                         }
 
@@ -176,7 +176,7 @@ namespace AutoSalon.Pages
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Ошибка при расчете: {ex.Message}", "Ошибка", 
+                    MessageBox.Show($"Eroare la calcul: {ex.Message}", "Eroare", 
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             };

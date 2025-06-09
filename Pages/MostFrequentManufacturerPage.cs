@@ -20,12 +20,12 @@ namespace AutoSalon.Pages
 
         private void InitializeComponent()
         {
-            this.Text = "Производитель с наибольшим количеством автомобилей";
+            this.Text = "Producătorul cu Cel Mai Mare Număr de Automobile";
             this.Size = new System.Drawing.Size(800, 500);
 
             lblResult = new Label
             {
-                Text = "Загрузка данных...",
+                Text = "Se încarcă datele...",
                 Location = new System.Drawing.Point(20, 20),
                 AutoSize = true,
                 Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold)
@@ -46,14 +46,14 @@ namespace AutoSalon.Pages
                 MultiSelect = false
             };
 
-            dgvResults.Columns.Add("Manufacturer", "Производитель");
-            dgvResults.Columns.Add("Country", "Страна");
-            dgvResults.Columns.Add("CarCount", "Количество автомобилей");
+            dgvResults.Columns.Add("Manufacturer", "Producător");
+            dgvResults.Columns.Add("Country", "Țară");
+            dgvResults.Columns.Add("CarCount", "Număr de automobile");
             dgvResults.Columns["CarCount"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
             Button btnBack = new Button
             {
-                Text = "Назад",
+                Text = "Înapoi",
                 Location = new System.Drawing.Point(660, 410),
                 Size = new System.Drawing.Size(100, 30),
                 BackColor = System.Drawing.Color.FromArgb(0, 120, 215),
@@ -104,7 +104,7 @@ namespace AutoSalon.Pages
                             {
                                 var manufacturerName = dt.Rows[0]["manufacturer_name"].ToString();
                                 var carCount = Convert.ToInt32(dt.Rows[0]["car_count"]);
-                                lblResult.Text = $"Производитель с наибольшим количеством автомобилей: {manufacturerName} ({carCount} автомобилей)";
+                                lblResult.Text = $"Producătorul cu cel mai mare număr de automobile: {manufacturerName} ({carCount} automobile)";
 
                                 dgvResults.Rows.Clear();
                                 foreach (DataRow row in dt.Rows)
@@ -118,7 +118,7 @@ namespace AutoSalon.Pages
                             }
                             else
                             {
-                                lblResult.Text = "Данные не найдены";
+                                lblResult.Text = "Nu s-au găsit date";
                             }
                         }
                     }
@@ -126,9 +126,9 @@ namespace AutoSalon.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при загрузке данных: {ex.Message}", "Ошибка", 
+                MessageBox.Show($"Eroare la încărcarea datelor: {ex.Message}", "Eroare", 
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
-                lblResult.Text = "Ошибка при загрузке данных";
+                lblResult.Text = "Eroare la încărcarea datelor";
             }
         }
     }

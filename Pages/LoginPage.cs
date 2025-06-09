@@ -15,7 +15,7 @@ namespace AutoSalon.Pages
         {
             _userRepository = new UserRepository();
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.Text = "AutoSalon Premium - Sign In";
+            this.Text = "AutoSalon Premium - Autentificare";
             this.Size = new Size(500, 700);
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
@@ -58,7 +58,7 @@ namespace AutoSalon.Pages
             // Подзаголовок
             Label lblSubtitle = new Label
             {
-                Text = "Sign in to access your premium automotive experience",
+                Text = "Conectați-vă pentru a accesa experiența dvs. premium auto",
                 Size = new Size(500, 20),
                 Font = new Font("Segoe UI", 10),
                 ForeColor = Color.White,
@@ -111,10 +111,10 @@ namespace AutoSalon.Pages
                 BorderStyle = BorderStyle.None,
                 BackColor = Color.FromArgb(245, 245, 245),
                 ForeColor = Color.Gray,
-                Text = "Email Address"
+                Text = "Adresa de email"
             };
-            txtEmail.GotFocus += (s, e) => { if (txtEmail.Text == "Email Address") { txtEmail.Text = ""; txtEmail.ForeColor = Color.Black; } };
-            txtEmail.LostFocus += (s, e) => { if (string.IsNullOrWhiteSpace(txtEmail.Text)) { txtEmail.Text = "Email Address"; txtEmail.ForeColor = Color.Gray; } };
+            txtEmail.GotFocus += (s, e) => { if (txtEmail.Text == "Adresa de email") { txtEmail.Text = ""; txtEmail.ForeColor = Color.Black; } };
+            txtEmail.LostFocus += (s, e) => { if (string.IsNullOrWhiteSpace(txtEmail.Text)) { txtEmail.Text = "Adresa de email"; txtEmail.ForeColor = Color.Gray; } };
             emailPanel.Controls.AddRange(new Control[] { emailIcon, txtEmail });
 
             // Password field с иконкой
@@ -141,14 +141,14 @@ namespace AutoSalon.Pages
                 BackColor = Color.FromArgb(245, 245, 245),
                 ForeColor = Color.Black,
                 UseSystemPasswordChar = true,
-                PlaceholderText = "Password"
+                PlaceholderText = "Parolă"
             };
             passPanel.Controls.AddRange(new Control[] { passIcon, txtPassword });
 
             // Sign In button
             Button btnLogin = new Button
             {
-                Text = "Sign In",
+                Text = "Autentificare",
                 Location = new Point(25, 128),
                 Size = new Size(290, 44),
                 Font = new Font("Segoe UI", 11, FontStyle.Bold),
@@ -173,7 +173,7 @@ namespace AutoSalon.Pages
             };
             Label lblNoAccount = new Label
             {
-                Text = "Don't have an account?",
+                Text = "Nu aveți un cont?",
                 Location = new Point(0, 0),
                 Size = new Size(140, 20),
                 Font = new Font("Segoe UI", 9),
@@ -182,7 +182,7 @@ namespace AutoSalon.Pages
             };
             LinkLabel linkRegister = new LinkLabel
             {
-                Text = "Create account here",
+                Text = "Creați un cont aici",
                 Location = new Point(145, 0),
                 Size = new Size(120, 20),
                 Font = new Font("Segoe UI", 9, FontStyle.Regular),
@@ -196,7 +196,7 @@ namespace AutoSalon.Pages
             // Нижняя строка с преимуществами
             Label lblFooter = new Label
             {
-                Text = "🚗 Discover Premium Vehicles • Reliable Service • Competitive Financing",
+                Text = "🚗 Descoperiți Vehicule Premium • Servicii De Încredere • Finanțare Competitivă",
                 Size = new Size(500, 30),
                 Font = new Font("Segoe UI", 8),
                 ForeColor = Color.White,
@@ -207,9 +207,9 @@ namespace AutoSalon.Pages
             // События
             btnLogin.Click += (sender, e) =>
             {
-                if (txtEmail.Text == "Email Address" || string.IsNullOrEmpty(txtEmail.Text) || txtPassword.Text == "Password" || string.IsNullOrEmpty(txtPassword.Text))
+                if (txtEmail.Text == "Adresa de email" || string.IsNullOrEmpty(txtEmail.Text) || txtPassword.Text == "Parolă" || string.IsNullOrEmpty(txtPassword.Text))
                 {
-                    MessageBox.Show("Пожалуйста, заполните все поля!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Vă rugăm să completați toate câmpurile!", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
                 if (_userRepository.ValidateUser(txtEmail.Text, txtPassword.Text))
@@ -221,7 +221,7 @@ namespace AutoSalon.Pages
                 }
                 else
                 {
-                    MessageBox.Show("Неверный email или пароль!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Email sau parolă incorectă!", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             };
             linkRegister.Click += (sender, e) =>

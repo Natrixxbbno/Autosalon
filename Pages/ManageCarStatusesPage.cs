@@ -24,7 +24,7 @@ namespace AutoSalon.Pages
 
         private void InitializeComponents()
         {
-            this.Text = "Управление статусами автомобилей";
+            this.Text = "Gestionarea Statusurilor Automobilelor";
             this.Size = new Size(600, 400);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.BackColor = Color.White;
@@ -45,12 +45,12 @@ namespace AutoSalon.Pages
             };
             dgvStatuses.Columns.Add("Id", "ID");
             dgvStatuses.Columns["Id"].Visible = false;
-            dgvStatuses.Columns.Add("Name", "Название");
-            dgvStatuses.Columns.Add("Color", "Цвет бейджа");
+            dgvStatuses.Columns.Add("Name", "Nume");
+            dgvStatuses.Columns.Add("Color", "Culoare badge");
 
-            btnAdd = new Button { Text = "Добавить", Location = new Point(20, 290), Size = new Size(120, 40), BackColor = Color.FromArgb(0, 120, 215), ForeColor = Color.White, FlatStyle = FlatStyle.Flat };
-            btnEdit = new Button { Text = "Редактировать", Location = new Point(160, 290), Size = new Size(150, 40), BackColor = Color.FromArgb(0, 120, 215), ForeColor = Color.White, FlatStyle = FlatStyle.Flat };
-            btnDelete = new Button { Text = "Удалить", Location = new Point(330, 290), Size = new Size(120, 40), BackColor = Color.FromArgb(220, 53, 69), ForeColor = Color.White, FlatStyle = FlatStyle.Flat };
+            btnAdd = new Button { Text = "Adaugă", Location = new Point(20, 290), Size = new Size(120, 40), BackColor = Color.FromArgb(0, 120, 215), ForeColor = Color.White, FlatStyle = FlatStyle.Flat };
+            btnEdit = new Button { Text = "Editează", Location = new Point(160, 290), Size = new Size(150, 40), BackColor = Color.FromArgb(0, 120, 215), ForeColor = Color.White, FlatStyle = FlatStyle.Flat };
+            btnDelete = new Button { Text = "Șterge", Location = new Point(330, 290), Size = new Size(120, 40), BackColor = Color.FromArgb(220, 53, 69), ForeColor = Color.White, FlatStyle = FlatStyle.Flat };
 
             btnAdd.Click += BtnAdd_Click;
             btnEdit.Click += BtnEdit_Click;
@@ -108,7 +108,7 @@ namespace AutoSalon.Pages
         {
             if (dgvStatuses.SelectedRows.Count == 0) return;
             int id = Convert.ToInt32(dgvStatuses.SelectedRows[0].Cells["Id"].Value);
-            if (MessageBox.Show("Удалить выбранный статус?", "Подтверждение", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show("Ștergeți statusul selectat?", "Confirmare", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 var repo = new CarStatusRepository();
                 repo.Delete(id);
@@ -142,16 +142,16 @@ namespace AutoSalon.Pages
 
         private void InitializeComponents()
         {
-            this.Text = "Статус";
+            this.Text = "Status";
             this.Size = new Size(350, 220);
             this.StartPosition = FormStartPosition.CenterParent;
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
 
-            Label lblName = new Label { Text = "Название:", Location = new Point(20, 20), Size = new Size(100, 20) };
+            Label lblName = new Label { Text = "Nume:", Location = new Point(20, 20), Size = new Size(100, 20) };
             txtName = new TextBox { Location = new Point(20, 45), Size = new Size(290, 25) };
-            Label lblColor = new Label { Text = "Цвет бейджа:", Location = new Point(20, 80), Size = new Size(100, 20) };
+            Label lblColor = new Label { Text = "Culoare badge:", Location = new Point(20, 80), Size = new Size(100, 20) };
             btnColor = new Button { Location = new Point(20, 105), Size = new Size(80, 30), BackColor = ColorTranslator.FromHtml(colorHex) };
             btnColor.Click += (s, e) => {
                 colorDialog = new ColorDialog();
@@ -161,12 +161,12 @@ namespace AutoSalon.Pages
                     colorHex = "#" + colorDialog.Color.R.ToString("X2") + colorDialog.Color.G.ToString("X2") + colorDialog.Color.B.ToString("X2");
                 }
             };
-            btnSave = new Button { Text = "Сохранить", Location = new Point(20, 150), Size = new Size(120, 35), BackColor = Color.FromArgb(0, 120, 215), ForeColor = Color.White, FlatStyle = FlatStyle.Flat };
-            btnCancel = new Button { Text = "Отмена", Location = new Point(190, 150), Size = new Size(120, 35), BackColor = Color.FromArgb(200, 200, 200), ForeColor = Color.Black, FlatStyle = FlatStyle.Flat };
+            btnSave = new Button { Text = "Salvează", Location = new Point(20, 150), Size = new Size(120, 35), BackColor = Color.FromArgb(0, 120, 215), ForeColor = Color.White, FlatStyle = FlatStyle.Flat };
+            btnCancel = new Button { Text = "Anulează", Location = new Point(190, 150), Size = new Size(120, 35), BackColor = Color.FromArgb(200, 200, 200), ForeColor = Color.Black, FlatStyle = FlatStyle.Flat };
             btnSave.Click += (s, e) => {
                 if (string.IsNullOrWhiteSpace(txtName.Text))
                 {
-                    MessageBox.Show("Введите название статуса!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Introduceți numele statusului!", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 Status.Name = txtName.Text.Trim();

@@ -20,7 +20,7 @@ namespace AutoSalon.Pages
 
         private void InitializeComponents()
         {
-            this.Text = "Автосалон - Аналитика";
+            this.Text = "AutoSalon - Analiză";
             this.Size = new Size(1200, 800);
             this.StartPosition = FormStartPosition.CenterScreen;
             this.BackColor = Color.FromArgb(245, 245, 245);
@@ -36,7 +36,7 @@ namespace AutoSalon.Pages
             };
             Label lblTitle = new Label
             {
-                Text = "Analytics",
+                Text = "Analiză",
                 Font = new Font("Segoe UI", 24F, FontStyle.Bold),
                 ForeColor = Color.Black,
                 AutoSize = true,
@@ -44,7 +44,7 @@ namespace AutoSalon.Pages
             };
              Label lblSubtitle = new Label
             {
-                Text = "Insights and statistics about your inventory",
+                Text = "Statistici și informații despre inventarul dvs.",
                 Font = new Font("Segoe UI", 10F),
                 ForeColor = Color.Gray,
                 AutoSize = true,
@@ -105,8 +105,8 @@ namespace AutoSalon.Pages
 
             // Карточка "Average Price"
             Panel cardAveragePrice = CreateCard(new Point(0, 0), new Size(360, 150));
-            Label lblAvgTitle = CreateCardTitle("Average Price", new Point(20, 20));
-            Label lblAvgSubtitle = CreateCardSubtitle("Overall inventory average", new Point(20, 45));
+            Label lblAvgTitle = CreateCardTitle("Preț Mediu", new Point(20, 20));
+            Label lblAvgSubtitle = CreateCardSubtitle("Media generală a inventarului", new Point(20, 45));
             Label lblAvgValue = new Label
             {
                 Text = avgPrice > 0 ? $"${avgPrice:N0}" : "-",
@@ -122,13 +122,13 @@ namespace AutoSalon.Pages
 
             // Карточка "Price Range"
             Panel cardPriceRange = CreateCard(new Point(380, 0), new Size(360, 150));
-            Label lblRangeTitle = CreateCardTitle("Price Range", new Point(20, 20));
-            Label lblRangeSubtitle = CreateCardSubtitle("Min and max prices", new Point(20, 45));
+            Label lblRangeTitle = CreateCardTitle("Interval de Preț", new Point(20, 20));
+            Label lblRangeSubtitle = CreateCardSubtitle("Prețuri minime și maxime", new Point(20, 45));
 
-            Label lblMin = new Label { Text = "Minimum:", Font = new Font("Segoe UI", 12F), ForeColor = Color.Black, Location = new Point(20, 80), AutoSize = true };
+            Label lblMin = new Label { Text = "Minim:", Font = new Font("Segoe UI", 12F), ForeColor = Color.Black, Location = new Point(20, 80), AutoSize = true };
             Label lblMinValue = new Label { Text = minPrice > 0 ? $"${minPrice:N0}" : "-", Font = new Font("Segoe UI", 12F, FontStyle.Bold), ForeColor = Color.Black, Location = new Point(220, 80), AutoSize = true };
 
-            Label lblMax = new Label { Text = "Maximum:", Font = new Font("Segoe UI", 12F), ForeColor = Color.Black, Location = new Point(20, 105), AutoSize = true };
+            Label lblMax = new Label { Text = "Maxim:", Font = new Font("Segoe UI", 12F), ForeColor = Color.Black, Location = new Point(20, 105), AutoSize = true };
              Label lblMaxValue = new Label { Text = maxPrice > 0 ? $"${maxPrice:N0}" : "-", Font = new Font("Segoe UI", 12F, FontStyle.Bold), ForeColor = Color.Black, Location = new Point(220, 105), AutoSize = true };
 
             cardPriceRange.Controls.Add(lblRangeTitle);
@@ -141,8 +141,8 @@ namespace AutoSalon.Pages
 
             // Карточка "Inventory Status"
             Panel cardInventory = CreateCard(new Point(760, 0), new Size(360, 150));
-            Label lblInvTitle = CreateCardTitle("Inventory Status", new Point(20, 20));
-            Label lblInvSubtitle = CreateCardSubtitle("Current stock status", new Point(20, 45));
+            Label lblInvTitle = CreateCardTitle("Status Inventar", new Point(20, 20));
+            Label lblInvSubtitle = CreateCardSubtitle("Statusul curent al stocului", new Point(20, 45));
             cardInventory.Controls.Add(lblInvTitle);
             cardInventory.Controls.Add(lblInvSubtitle);
 
@@ -173,8 +173,8 @@ namespace AutoSalon.Pages
 
             // Карточка "Price by Color"
             Panel cardColor = CreateCard(new Point(0, 170), new Size(550, 300));
-            Label lblColorTitle = CreateCardTitle("Price by Color", new Point(20, 20));
-            Label lblColorSubtitle = CreateCardSubtitle("Distribution of car prices by color", new Point(20, 45));
+            Label lblColorTitle = CreateCardTitle("Preț după Culoare", new Point(20, 20));
+            Label lblColorSubtitle = CreateCardSubtitle("Distribuția prețurilor mașinilor pe culori", new Point(20, 45));
             cardColor.Controls.Add(lblColorTitle);
             cardColor.Controls.Add(lblColorSubtitle);
 
@@ -245,8 +245,8 @@ namespace AutoSalon.Pages
 
             // Карточка "Popular Manufacturers"
             Panel cardManufacturers = CreateCard(new Point(570, 170), new Size(550, 300));
-            Label lblManTitle = CreateCardTitle("Popular Manufacturers", new Point(20, 20));
-            Label lblManSubtitle = CreateCardSubtitle("Most popular car brands in inventory", new Point(20, 45));
+            Label lblManTitle = CreateCardTitle("Producători Populari", new Point(20, 20));
+            Label lblManSubtitle = CreateCardSubtitle("Cele mai populare mărci de mașini din inventar", new Point(20, 45));
             cardManufacturers.Controls.Add(lblManTitle);
             cardManufacturers.Controls.Add(lblManSubtitle);
 

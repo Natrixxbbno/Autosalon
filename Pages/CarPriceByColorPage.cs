@@ -49,19 +49,19 @@ namespace AutoSalon.Pages
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при загрузке списка цветов: {ex.Message}", "Ошибка", 
+                MessageBox.Show($"Eroare la încărcarea listei de culori: {ex.Message}", "Eroare", 
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void InitializeComponent()
         {
-            this.Text = "Цены автомобилей по цвету";
+            this.Text = "Prețurile Automobilelor pe Culori";
             this.Size = new System.Drawing.Size(800, 500);
 
             Label lblColor = new Label
             {
-                Text = "Выберите цвет автомобиля:",
+                Text = "Selectați culoarea automobilului:",
                 Location = new System.Drawing.Point(20, 20),
                 AutoSize = true
             };
@@ -75,7 +75,7 @@ namespace AutoSalon.Pages
 
             Button btnShow = new Button
             {
-                Text = "Показать",
+                Text = "Afișează",
                 Location = new System.Drawing.Point(240, 50),
                 Width = 100
             };
@@ -95,11 +95,11 @@ namespace AutoSalon.Pages
                 MultiSelect = false
             };
 
-            dgvCars.Columns.Add("Type", "Тип");
-            dgvCars.Columns.Add("Manufacturer", "Производитель");
-            dgvCars.Columns.Add("Model", "Модель");
-            dgvCars.Columns.Add("Color", "Цвет");
-            dgvCars.Columns.Add("Price", "Цена");
+            dgvCars.Columns.Add("Type", "Tip");
+            dgvCars.Columns.Add("Manufacturer", "Producător");
+            dgvCars.Columns.Add("Model", "Model");
+            dgvCars.Columns.Add("Color", "Culoare");
+            dgvCars.Columns.Add("Price", "Preț");
             dgvCars.Columns["Price"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
             btnShow.Click += (sender, e) =>
@@ -108,7 +108,7 @@ namespace AutoSalon.Pages
                 {
                     if (cmbColor.SelectedItem == null)
                     {
-                        MessageBox.Show("Пожалуйста, выберите цвет", "Предупреждение", 
+                        MessageBox.Show("Vă rugăm să selectați o culoare", "Avertisment", 
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
@@ -133,8 +133,8 @@ namespace AutoSalon.Pages
                             )
                             SELECT 
                                 CASE 
-                                    WHEN max_price_rank = 1 THEN 'Самый дорогой'
-                                    WHEN min_price_rank = 1 THEN 'Самый дешёвый'
+                                    WHEN max_price_rank = 1 THEN 'Cel mai scump'
+                                    WHEN min_price_rank = 1 THEN 'Cel mai ieftin'
                                 END as type,
                                 manufacturer_name,
                                 model,
@@ -169,7 +169,7 @@ namespace AutoSalon.Pages
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Ошибка при получении данных: {ex.Message}", "Ошибка", 
+                    MessageBox.Show($"Eroare la obținerea datelor: {ex.Message}", "Eroare", 
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             };

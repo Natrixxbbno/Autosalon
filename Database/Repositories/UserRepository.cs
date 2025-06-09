@@ -26,7 +26,7 @@ namespace AutoSalon.Database.Repositories
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при проверке email: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Eroare la verificarea email-ului: {ex.Message}", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
@@ -57,7 +57,7 @@ namespace AutoSalon.Database.Repositories
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при валидации пользователя: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Eroare la validarea utilizatorului: {ex.Message}", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
@@ -68,7 +68,7 @@ namespace AutoSalon.Database.Repositories
             {
                 if (IsEmailExists(email))
                 {
-                    MessageBox.Show("Пользователь с таким email уже существует!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Un utilizator cu acest email există deja!", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return false;
                 }
 
@@ -93,7 +93,7 @@ namespace AutoSalon.Database.Repositories
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при регистрации пользователя: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Eroare la înregistrarea utilizatorului: {ex.Message}", "Eroare", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
         }
