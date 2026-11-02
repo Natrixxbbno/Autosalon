@@ -25,4 +25,6 @@ nupkg/
 *.nupkg
 *.snupkg
 **/packages/*
-!**/packages/build/ 
+!**/packages/build/
+# Aplicatia publicata
+Aplicatie/

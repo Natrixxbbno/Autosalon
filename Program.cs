@@ -10,14 +10,16 @@ namespace AutoSalon
         [STAThread]
         static void Main()
         {
+            // Resolve image paths consistently when launched by double-click or a shortcut.
+            System.IO.Directory.SetCurrentDirectory(AppContext.BaseDirectory);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            
+
             try
             {
                 // Inițializarea bazei de date
                 DatabaseMigration.InitializeDatabase();
-                
+
                 Application.Run(new LoginPage());
             }
             catch (Exception ex)
@@ -26,4 +28,4 @@ namespace AutoSalon
             }
         }
     }
-} 
+}

@@ -25,6 +25,7 @@ namespace AutoSalon.Pages
             // Градиентный фон
             this.Paint += (s, e) =>
             {
+                if (ClientRectangle.Width <= 0 || ClientRectangle.Height <= 0) return;
                 using (LinearGradientBrush brush = new LinearGradientBrush(
                     this.ClientRectangle,
                     Color.FromArgb(61, 102, 255),
@@ -227,9 +228,18 @@ namespace AutoSalon.Pages
             linkRegister.Click += (sender, e) =>
             {
                 this.Hide();
-                RegisterPage registerPage = new RegisterPage();
-                registerPage.ShowDialog();
-                this.Show();
+                try
+                {
+                    using var registerPage = new RegisterPage();
+                    registerPage.ShowDialog();
+                }
+                finally
+                {
+                    this.Show();
+                    this.Activate();
+                    txtPassword.Clear();
+                    txtEmail.Focus();
+                }
             };
 
             // Центрирование и аккуратные отступы
@@ -277,4 +287,4 @@ namespace AutoSalon.Pages
         private static extern IntPtr CreateRoundRectRgn(
             int nLeftRect, int nTopRect, int nRightRect, int nBottomRect, int nWidthEllipse, int nHeightEllipse);
     }
-} 
+}

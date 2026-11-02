@@ -297,7 +297,13 @@ namespace AutoSalon.Pages
                 Location = new Point(68, 32),
                 AutoSize = true
             };
-            btnDashboard = new Button { Text = "\uD83D\uDCCA  Dashboard", Location = new Point(0, 80), Size = new Size(220, 48), FlatStyle = FlatStyle.Flat, BackColor = Color.FromArgb(140, 82, 255), ForeColor = Color.White, Font = new Font("Segoe UI", 12F, FontStyle.Bold), TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(24, 0, 0, 0), Cursor = Cursors.Hand, TabStop = false };
+            btnDashboard = new Button { Text = "Comandă nouă", Location = new Point(0, 80), Size = new Size(220, 48), FlatStyle = FlatStyle.Flat, BackColor = Color.Transparent, ForeColor = Color.White, Font = new Font("Segoe UI", 12F, FontStyle.Regular), TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(24, 0, 0, 0), Cursor = Cursors.Hand, TabStop = false };
+            using (var orderIcon = Image.FromFile(System.IO.Path.Combine(AppContext.BaseDirectory, "Resources", "NewOrder.png")))
+                btnDashboard.Image = new Bitmap(orderIcon, new Size(24, 24));
+            btnDashboard.ImageAlign = ContentAlignment.MiddleLeft;
+            btnDashboard.TextImageRelation = TextImageRelation.ImageBeforeText;
+            btnDashboard.Text = "  Comandă nouă";
+            btnDashboard.Disposed += (s, e) => btnDashboard.Image?.Dispose();
             btnCarInventory = new Button { Text = "\uD83D\uDE97  Car Inventory", Location = new Point(0, 128), Size = new Size(220, 48), FlatStyle = FlatStyle.Flat, BackColor = Color.Transparent, ForeColor = Color.White, Font = new Font("Segoe UI", 12F, FontStyle.Regular), TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(24, 0, 0, 0), Cursor = Cursors.Hand, TabStop = false };
             btnRegisterNewCar = new Button { Text = "\u2795  Register New Car", Location = new Point(0, 176), Size = new Size(220, 48), FlatStyle = FlatStyle.Flat, BackColor = Color.Transparent, ForeColor = Color.White, Font = new Font("Segoe UI", 12F, FontStyle.Regular), TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(24, 0, 0, 0), Cursor = Cursors.Hand, TabStop = false };
             btnAnalytics = new Button { Text = "\u23F0  Analytics", Location = new Point(0, 224), Size = new Size(220, 48), FlatStyle = FlatStyle.Flat, BackColor = Color.Transparent, ForeColor = Color.White, Font = new Font("Segoe UI", 12F, FontStyle.Regular), TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(24, 0, 0, 0), Cursor = Cursors.Hand, TabStop = false };
@@ -317,22 +323,60 @@ namespace AutoSalon.Pages
             };
 
             // Добавляем обработчики для кнопок бокового меню
-            btnDashboard.Click += (s, e) => { SetActiveSidebarButton(btnDashboard); MessageBox.Show("Раздел Dashboard в разработке", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information); };
-            btnCarInventory.Click += (s, e) => { SetActiveSidebarButton(btnCarInventory); /* ничего не делаем, уже на этой странице */ };
+            btnDashboard.Click += (s, e) => { using var form = new OrderPage(); form.ShowDialog(this); LoadCars(); };
+            btnCarInventory.Click += (s, e) => { /* ничего не делаем, уже на этой странице */ };
             btnRegisterNewCar.Click += (s, e) => {
-                SetActiveSidebarButton(btnRegisterNewCar);
                 using (var registerForm = new RegisterCarPage())
                 {
                     registerForm.ShowDialog();
                     LoadCars();
                 }
             };
-            btnAnalytics.Click += (s, e) => { SetActiveSidebarButton(btnAnalytics); using (var form = new AnalyticsPage()) form.ShowDialog(); };
-            btnReports.Click += (s, e) => { SetActiveSidebarButton(btnReports); MessageBox.Show("Раздел Reports в разработке", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information); };
+            btnAnalytics.Click += (s, e) => { using (var form = new AnalyticsPage()) form.ShowDialog(); };
+            btnReports.Click += (s, e) => { using var form = new OrderReportsPage(); form.ShowDialog(this); LoadCars(); };
             btnBack.Click += (s, e) => this.Close();
 
+            var btnTradeIn = new Button
+            {
+                Text = "⇄  Trade-in", Location = new Point(0, 320), Size = new Size(220, 48),
+                FlatStyle = FlatStyle.Flat, BackColor = Color.Transparent, ForeColor = Color.White,
+                Font = new Font("Segoe UI", 12F), TextAlign = ContentAlignment.MiddleLeft,
+                Padding = new Padding(24, 0, 0, 0), Cursor = Cursors.Hand, TabStop = false
+            };
+            btnTradeIn.Click += (s, e) => { using var form = new OrderPage(true); form.ShowDialog(this); LoadCars(); };
+            sidebarPanel.Controls.Add(btnTradeIn);
+            // Show purple with black text only while a menu button is pressed.
+            foreach (var button in new[] { btnDashboard, btnCarInventory, btnRegisterNewCar, btnAnalytics, btnReports, btnTradeIn, btnBack })
+            {
+                button.FlatAppearance.BorderSize = 0;
+                button.UseVisualStyleBackColor = false;
+                button.FlatAppearance.MouseOverBackColor = sidebarPanel.BackColor;
+                button.FlatAppearance.MouseDownBackColor = Color.FromArgb(140, 82, 255);
+                button.MouseDown += (s, e) =>
+                {
+                    if (e.Button == MouseButtons.Left)
+                        button.ForeColor = Color.Black;
+                };
+                button.MouseUp += (s, e) => button.ForeColor = Color.White;
+                button.MouseLeave += (s, e) => button.ForeColor = Color.White;
+                button.MouseCaptureChanged += (s, e) =>
+                {
+                    if (!button.Capture)
+                        button.ForeColor = Color.White;
+                };
+                button.KeyDown += (s, e) =>
+                {
+                    if (e.KeyCode == Keys.Space)
+                        button.ForeColor = Color.Black;
+                };
+                button.KeyUp += (s, e) => button.ForeColor = Color.White;
+                button.LostFocus += (s, e) => button.ForeColor = Color.White;
+                if (button != btnBack)
+                    button.Click += (s, e) => txtSearch.Focus();
+            }
+
             // После создания dgvCars:
-            dgvCars.CellContentClick += dgvCars_CellContentClick;
+
             dgvCars.EnableHeadersVisualStyles = false;
             dgvCars.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(48, 58, 76);
             dgvCars.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
@@ -348,8 +392,8 @@ namespace AutoSalon.Pages
             searchPanel.Controls.Add(cmbManufacturerFilter);
             searchPanel.Controls.Add(lblStatus);
             searchPanel.Controls.Add(cmbStatusFilter);
-            sidebarPanel.Controls.AddRange(new Control[] { logoIcon, lblLogo, btnDashboard, btnCarInventory, btnRegisterNewCar, btnAnalytics, btnReports, btnBack });
-            
+            sidebarPanel.Controls.AddRange(new Control[] { logoIcon, lblLogo, btnDashboard, btnCarInventory, btnRegisterNewCar, btnAnalytics, btnReports, btnTradeIn, btnBack });
+
             this.Controls.AddRange(new Control[] { topPanel, searchPanel, dgvCars, sidebarPanel });
 
             // Сдвигаем остальные панели вправо
@@ -381,7 +425,7 @@ namespace AutoSalon.Pages
                 if (!string.IsNullOrWhiteSpace(txtSearch.Text))
                 {
                     string searchText = txtSearch.Text;
-                    cars = cars.Where(c => 
+                    cars = cars.Where(c =>
                         c.Manufacturer.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                         c.Model.Contains(searchText, StringComparison.OrdinalIgnoreCase) ||
                         c.RegistrationNumber.Contains(searchText, StringComparison.OrdinalIgnoreCase)
@@ -446,59 +490,6 @@ namespace AutoSalon.Pages
             }
         }
 
-        private void dgvCars_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (e.RowIndex < 0) return;
-            if (e.ColumnIndex == dgvCars.Columns["EditImageColumn"].Index)
-            {
-                var carId = Convert.ToInt32(dgvCars.Rows[e.RowIndex].Cells["Id"].Value);
-                var carRepository = new CarRepository();
-                var car = carRepository.GetById(carId);
-                using (var editForm = new EditCarPage(car))
-                {
-                    if (editForm.ShowDialog() == DialogResult.OK)
-                    {
-                        LoadStatusFilter();
-                        LoadCars();
-                    }
-                }
-                return;
-            }
-            if (e.ColumnIndex == dgvCars.Columns["DeleteImageColumn"].Index)
-            {
-                var carId = Convert.ToInt32(dgvCars.Rows[e.RowIndex].Cells["Id"].Value);
-                var registrationNumber = dgvCars.Rows[e.RowIndex].Cells["RegistrationNumber"].Value.ToString();
-
-                var result = MessageBox.Show(
-                    $"Вы уверены, что хотите удалить автомобиль с номером {registrationNumber}?",
-                    "Подтверждение удаления",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question
-                );
-
-                if (result == DialogResult.Yes)
-                {
-                    try
-                    {
-                        var carRepository = new CarRepository();
-                        if (carRepository.Delete(carId))
-                        {
-                            MessageBox.Show("Автомобиль успешно удален.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            LoadCars();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Ошибка при удалении автомобиля.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show($"Ошибка при удалении: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
-        }
-
         private void LoadManufacturerFilter()
         {
             var repo = new ManufacturerRepository();
@@ -543,7 +534,7 @@ namespace AutoSalon.Pages
                 }
 
                 // Сортируем список
-                cars = isPriceAscending 
+                cars = isPriceAscending
                     ? cars.OrderBy(c => c.Price).ToList()
                     : cars.OrderByDescending(c => c.Price).ToList();
 
@@ -571,22 +562,9 @@ namespace AutoSalon.Pages
             }
         }
 
-        private void SetActiveSidebarButton(Button activeButton)
-        {
-            var buttons = new[] { btnDashboard, btnCarInventory, btnRegisterNewCar, btnAnalytics, btnReports };
-            foreach (var btn in buttons)
-            {
-                btn.BackColor = Color.Transparent;
-                btn.ForeColor = Color.Black;
-                btn.Font = new Font("Segoe UI", 12F, FontStyle.Regular);
-            }
-            activeButton.BackColor = Color.Black;
-            activeButton.ForeColor = Color.White;
-            activeButton.Font = new Font("Segoe UI", 12F, FontStyle.Regular);
-        }
-
         private void MainForm_Paint(object sender, PaintEventArgs e)
         {
+            if (ClientRectangle.Width <= 0 || ClientRectangle.Height <= 0) return;
             // Градиентный фон сверху вниз
             using (var brush = new System.Drawing.Drawing2D.LinearGradientBrush(this.ClientRectangle,
                 Color.White, Color.FromArgb(241, 244, 248), 90F))
@@ -685,4 +663,4 @@ namespace AutoSalon.Pages
             int nHeightEllipse // height of ellipse
         );
     }
-} 
+}

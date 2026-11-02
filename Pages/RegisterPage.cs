@@ -63,6 +63,7 @@ namespace AutoSalon.Pages
             // Градиентный фон для header
             headerPanel.Paint += (s, e) =>
             {
+                if (headerPanel.ClientRectangle.Width <= 0 || headerPanel.ClientRectangle.Height <= 0) return;
                 using (var brush = new System.Drawing.Drawing2D.LinearGradientBrush(headerPanel.ClientRectangle,
                     Color.FromArgb(63, 94, 251), Color.FromArgb(70, 204, 252), 90F))
                 {
@@ -227,6 +228,7 @@ namespace AutoSalon.Pages
                     if (userRepository.RegisterUser(txtFirstName.Text, txtLastName.Text, txtEmail.Text, txtPassword.Text))
                     {
                         MessageBox.Show("Cont creat cu succes!", "Succes", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        this.DialogResult = DialogResult.OK;
                         this.Close();
                     }
                 }
@@ -238,17 +240,14 @@ namespace AutoSalon.Pages
 
             linkSignIn.LinkClicked += (s, e) =>
             {
-                this.Hide();
-                var loginForm = new LoginPage();
-                loginForm.ShowDialog();
-                this.Show();
+                this.DialogResult = DialogResult.Cancel;
+                this.Close();
             };
 
             // Добавление панелей на форму
             this.Controls.Add(headerPanel);
             this.Controls.Add(formPanel);
 
-            this.FormClosed += (s, e) => Application.Exit();
         }
 
         private bool ValidateEmail(string email)
