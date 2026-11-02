@@ -163,7 +163,7 @@ namespace AutoSalon.Pages
                 Location = new Point(20, 465),
                 Size = new Size(440, 25),
                 Minimum = 0,
-                Maximum = 1000000,
+                Maximum = int.MaxValue,
                 Value = 0,
                 ThousandsSeparator = true
             };

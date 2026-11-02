@@ -61,6 +61,7 @@ namespace AutoSalon.Database.Repositories
                 WHERE id = @carId AND status_id IN
                 (SELECT id FROM car_statuses WHERE name = 'Available')
                 AND NOT EXISTS (SELECT 1 FROM orders WHERE car_id = @carId AND completed_at IS NULL)
+                AND NOT EXISTS (SELECT 1 FROM auto_contracts WHERE car_id = @carId AND closed_at IS NULL)
                 RETURNING price", conn, transaction))
             {
                 reserve.Parameters.AddWithValue("carId", carId);
@@ -96,6 +97,22 @@ namespace AutoSalon.Database.Repositories
             int id = Convert.ToInt32(cmd.ExecuteScalar());
             transaction.Commit();
             return id;
+        }
+
+        public void UpdateTradeInPrice(int orderId, decimal originalPrice, decimal newPrice)
+        {
+            if (newPrice <= 0 || newPrice > 9999999999.99m || decimal.Round(newPrice, 2) != newPrice)
+                throw new ArgumentException("Introduceți un preț valid, mai mare decât zero.");
+            using var conn = DatabaseConnection.GetConnection();
+            conn.Open();
+            using var cmd = new NpgsqlCommand(@"UPDATE orders SET desired_car_price = @price
+                WHERE id = @id AND trade_in_model IS NOT NULL AND completed_at IS NULL
+                AND desired_car_price = @originalPrice", conn);
+            cmd.Parameters.AddWithValue("id", orderId);
+            cmd.Parameters.AddWithValue("price", newPrice);
+            cmd.Parameters.AddWithValue("originalPrice", originalPrice);
+            if (cmd.ExecuteNonQuery() != 1)
+                throw new InvalidOperationException("Comanda a fost modificată sau finalizată. Actualizați lista și încercați din nou.");
         }
 
         public void Complete(int orderId)

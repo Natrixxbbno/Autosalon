@@ -112,15 +112,14 @@ namespace AutoSalon.Pages
                     MessageBox.Show("Selectați o comandă Trade-in din listă.", "Trade-in");
                     return;
                 }
-                decimal balance = Convert.ToDecimal(selected["trade_in_balance"]);
-                MessageBox.Show($"Mașină oferită: {selected["trade_in_model"]} ({selected["trade_in_year"]})\n" +
-                    $"Înmatriculare: {selected["trade_in_registration"]}\nKilometraj: {selected["trade_in_mileage"]} km\n" +
-                    $"Evaluare manuală: {Convert.ToDecimal(selected["trade_in_value"]):N2} €\n" +
-                    $"Preț mașină dorită: {Convert.ToDecimal(selected["desired_car_price"]):N2} €\n" +
-                    (balance >= 0 ? $"De adăugat: {balance:N2} €" : $"De restituit clientului: {-balance:N2} €"),
-                    "Detalii trade-in", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                using var form = new TradeInDetailsPage(selected);
+                form.ShowDialog(this);
+                LoadOrders();
             };
             toolbar.Controls.Add(details);
+            var contracts = new Button { Text = "Credite și închirieri", AutoSize = true };
+            contracts.Click += (s, e) => { using var form = new ContractReportsPage(); form.ShowDialog(this); LoadOrders(); };
+            toolbar.Controls.Add(contracts);
             toolbar.Controls.Add(status);
             Controls.Add(orders);
             Controls.Add(toolbar);

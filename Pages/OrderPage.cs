@@ -25,7 +25,7 @@ namespace AutoSalon.Pages
         private readonly TextBox offeredColor = new() { MaxLength = 50 };
         private readonly TextBox offeredRegistration = new() { MaxLength = 20 };
         private readonly NumericUpDown offeredYear = new() { Minimum = 1900, Maximum = DateTime.Now.Year + 1, Value = DateTime.Now.Year };
-        private readonly NumericUpDown offeredMileage = new() { Maximum = 10000000, ThousandsSeparator = false };
+        private readonly NumericUpDown offeredMileage = new() { Maximum = int.MaxValue, ThousandsSeparator = false };
         private readonly NumericUpDown offeredValue = new() { Maximum = 99999999.99m, DecimalPlaces = 2 };
         private readonly Label tradeSummary = new() { Dock = DockStyle.Fill, ForeColor = Color.FromArgb(90, 45, 170), Padding = new Padding(6), Font = new Font("Segoe UI", 11, FontStyle.Bold) };
 

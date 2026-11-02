@@ -55,15 +55,15 @@ namespace AutoSalon.Pages
             Label lblModel = new Label { Text = "Model:", Location = new Point(20, 80), Size = new Size(200, 20) };
             txtModel = new TextBox { Location = new Point(20, 105), Size = new Size(440, 25) };
             Label lblYear = new Label { Text = "An de fabricație:", Location = new Point(20, 140), Size = new Size(200, 20) };
-            numYear = new NumericUpDown { Location = new Point(20, 165), Size = new Size(440, 25), Minimum = 1900, Maximum = DateTime.Now.Year, Value = DateTime.Now.Year };
+            numYear = new NumericUpDown { Location = new Point(20, 165), Size = new Size(440, 25), Minimum = 1900, Maximum = DateTime.Now.Year + 1, Value = DateTime.Now.Year };
             Label lblColor = new Label { Text = "Culoare:", Location = new Point(20, 200), Size = new Size(200, 20) };
             txtColor = new TextBox { Location = new Point(20, 225), Size = new Size(440, 25) };
             Label lblPrice = new Label { Text = "Preț:", Location = new Point(20, 260), Size = new Size(200, 20) };
-            numPrice = new NumericUpDown { Location = new Point(20, 285), Size = new Size(440, 25), Minimum = 1000, Maximum = 1000000000, DecimalPlaces = 2, ThousandsSeparator = true, Value = 1000 };
+            numPrice = new NumericUpDown { Location = new Point(20, 285), Size = new Size(440, 25), Minimum = 0, Maximum = 99999999.99m, DecimalPlaces = 2, ThousandsSeparator = true, Value = 1000 };
             Label lblRegistrationNumber = new Label { Text = "Număr de înmatriculare:", Location = new Point(20, 320), Size = new Size(200, 20) };
             txtRegistrationNumber = new TextBox { Location = new Point(20, 345), Size = new Size(440, 25) };
             Label lblMileage = new Label { Text = "Kilometraj:", Location = new Point(20, 380), Size = new Size(200, 20) };
-            numMileage = new NumericUpDown { Location = new Point(20, 405), Size = new Size(440, 25), Minimum = 0, Maximum = 1000000, Value = 0, ThousandsSeparator = true };
+            numMileage = new NumericUpDown { Location = new Point(20, 405), Size = new Size(440, 25), Minimum = 0, Maximum = int.MaxValue, Value = 0, ThousandsSeparator = true };
             Label lblStatus = new Label { Text = "Status:", Location = new Point(20, 440), Size = new Size(200, 20) };
             cmbStatus = new ComboBox { Location = new Point(20, 465), Size = new Size(440, 25), DropDownStyle = ComboBoxStyle.DropDownList };
             Label lblPurchaseDate = new Label { Text = "Data achiziției:", Location = new Point(20, 500), Size = new Size(200, 20) };

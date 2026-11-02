@@ -345,8 +345,22 @@ namespace AutoSalon.Pages
             };
             btnTradeIn.Click += (s, e) => { using var form = new OrderPage(true); form.ShowDialog(this); LoadCars(); };
             sidebarPanel.Controls.Add(btnTradeIn);
+            Button ContractButton(string title, int y, bool rental)
+            {
+                var button = new Button
+                {
+                    Text = title, Location = new Point(0, y), Size = new Size(220, 48), FlatStyle = FlatStyle.Flat,
+                    BackColor = Color.Transparent, ForeColor = Color.White, Font = new Font("Segoe UI", 12F),
+                    TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(24, 0, 0, 0), Cursor = Cursors.Hand, TabStop = false
+                };
+                button.Click += (s, e) => { using var form = new ContractPage(rental); form.ShowDialog(this); LoadCars(); };
+                sidebarPanel.Controls.Add(button);
+                return button;
+            }
+            var btnCredit = ContractButton("Credit auto", 368, false);
+            var btnRental = ContractButton("Închiriere auto", 416, true);
             // Show purple with black text only while a menu button is pressed.
-            foreach (var button in new[] { btnDashboard, btnCarInventory, btnRegisterNewCar, btnAnalytics, btnReports, btnTradeIn, btnBack })
+            foreach (var button in new[] { btnDashboard, btnCarInventory, btnRegisterNewCar, btnAnalytics, btnReports, btnTradeIn, btnCredit, btnRental, btnBack })
             {
                 button.FlatAppearance.BorderSize = 0;
                 button.UseVisualStyleBackColor = false;
@@ -392,7 +406,7 @@ namespace AutoSalon.Pages
             searchPanel.Controls.Add(cmbManufacturerFilter);
             searchPanel.Controls.Add(lblStatus);
             searchPanel.Controls.Add(cmbStatusFilter);
-            sidebarPanel.Controls.AddRange(new Control[] { logoIcon, lblLogo, btnDashboard, btnCarInventory, btnRegisterNewCar, btnAnalytics, btnReports, btnTradeIn, btnBack });
+            sidebarPanel.Controls.AddRange(new Control[] { logoIcon, lblLogo, btnDashboard, btnCarInventory, btnRegisterNewCar, btnAnalytics, btnReports, btnTradeIn, btnCredit, btnRental, btnBack });
 
             this.Controls.AddRange(new Control[] { topPanel, searchPanel, dgvCars, sidebarPanel });
 
